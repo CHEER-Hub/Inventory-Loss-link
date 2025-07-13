@@ -478,6 +478,7 @@ class Inventory_Loss():
         boundary = box(*Haz.total_bounds)
         Inv=Inv[Inv.geometry.centroid.within(boundary)]
         # Store geometry and value of structure to save sapce
+        Inv.index=np.arange(0,len(Inv),1)
         Inv[['geometry','val_struct_col']].to_parquet(os.path.join(self.cwd+'Intermediate_outputs',cwd_haz+'_'+'Inv_'+cwd_inv+'.parquet'))
         # Instantiate index and an identifier column
         Inv['ID_I']=np.arange(0,len(Inv),1)
