@@ -1,0 +1,161 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1. Directory Structure &mdash; Binv 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=2709fde1"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="1. Utils Class" href="Utils.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Binv
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Objective</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Objective.html">Objective</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data Fusion module</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Data_Fusion.html">1. Data_Fusion Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Details.html">2. Data_Fusion Details</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utils module</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Utils.html">1. Utils Class</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Directory Guide</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Directory Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#description">1.1. Description</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Binv</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1. </span>Directory Structure</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Directory.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="directory-structure">
+<h1><span class="section-number">1. </span>Directory Structure<a class="headerlink" href="#directory-structure" title="Link to this heading"></a></h1>
+<p>The <cite>Inventory</cite> directory is the root of the data system. It organizes files into logically separated subdirectories for efficient access and processing throughout the pipeline. The structure is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Inventory/
+├── Raw data/   [R1]
+│   ├── State/  [R2]
+│      ├── FIPS/    [R3]
+│         ├── fips_building_microsoft.prquet    [R4]
+│         ├── fips_building_fema.prquet [R5]
+│         ├── fips_building_nsi.prquet  [R6]
+│      ├── Microspft.prquet [R7]
+│      ├── Fema.prquet  [R8]
+│      ├── NSI.prquet   [R9]
+├── Transitory data/    [T1]
+│   ├── State/
+│      ├── FIPS/
+│         ├── fips_F_M.prquet   [T2]
+│         ├── fips_F_M_N.prquet [T3]
+│         ├── Fusion_stat.txt   [T4]
+</pre></div>
+</div>
+<section id="description">
+<h2><span class="section-number">1.1. </span>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>R1. <strong>Raw_data/</strong>: Directory Containing pre-processed datasources, herein FEMA, Microsoft and NSI.</p></li>
+<li><p>R2. <strong>State/</strong>: Data are stored in respective folders labeled with their abbreviate names, e.g., Delaware: DE.</p></li>
+<li><p>R3. <strong>FIPS/</strong>: Each state folder is divided into its respective county FIPS code.</p></li>
+<li><p>R4. <strong>fips_building_microsoft.prquet</strong>: Pre-processed Microsoft data for each FIPS code.</p></li>
+<li><p>R5. <strong>fips_building_fema.prquet</strong>: Pre-processed FEMA data for each FIPS code.</p></li>
+<li><p>R6. <strong>fips_building_nsi.prquet</strong>: Pre-processed NSI data for each FIPS code.</p></li>
+<li><p>R7. <strong>Microspft.prquet</strong>: The merged FEMA data for the whole State.</p></li>
+<li><p>R8. <strong>FEMA.prquet</strong>: The merged Microsoft data for the whole State.</p></li>
+<li><p>R9. <strong>NSI.prquet</strong>: The merged Microsoft data for the whole State.</p></li>
+<li><p>T1. <strong>Transitory_data/</strong>: Directory Containing processed data obtained from two or more of the datasources.</p></li>
+<li><p>T2. <strong>fips_F_M.prquet</strong>: Microsoft-FEMA fused data for each FIPS code.</p></li>
+<li><p>T3. <strong>fips_F_M_N.prquet</strong>: Microsoft-FEMA-NSI fused data for each FIPS code.</p></li>
+<li><p>T4. <strong>Fusion_stat.txt</strong>: Data fusion process statistics.</p></li>
+</ul>
+<p>Note: The <cite>Inventory</cite> directory is typically assumed to be the current working directory (cwd), assgned by the user as parameter “cwd” in the code.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Utils.html" class="btn btn-neutral float-left" title="1. Utils Class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Hesam.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
