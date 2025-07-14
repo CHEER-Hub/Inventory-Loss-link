@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1. Data_Fusion Class &mdash; Binv 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=2709fde1"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="2. Data_Fusion Details" href="Details.html" />
+    <link rel="prev" title="Objective" href="Objective.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Binv
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Objective</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Objective.html">Objective</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data Fusion module</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Data_Fusion Class</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Data_Fusion.Data_Fusion"><code class="docutils literal notranslate"><span class="pre">Data_Fusion</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Data_Fusion.Data_Fusion.FEMA"><code class="docutils literal notranslate"><span class="pre">Data_Fusion.FEMA()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Data_Fusion.Data_Fusion.M_F_N_Fusion"><code class="docutils literal notranslate"><span class="pre">Data_Fusion.M_F_N_Fusion()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Data_Fusion.Data_Fusion.Microsoft"><code class="docutils literal notranslate"><span class="pre">Data_Fusion.Microsoft()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Data_Fusion.Data_Fusion.NSI"><code class="docutils literal notranslate"><span class="pre">Data_Fusion.NSI()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Data_Fusion.Data_Fusion.Sat_Imag33e"><code class="docutils literal notranslate"><span class="pre">Data_Fusion.Sat_Imag33e()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Data_Fusion.Data_Fusion.Sat_Image"><code class="docutils literal notranslate"><span class="pre">Data_Fusion.Sat_Image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Data_Fusion.Data_Fusion.col_names"><code class="docutils literal notranslate"><span class="pre">Data_Fusion.col_names()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Data_Fusion.Data_Fusion.match_data_county"><code class="docutils literal notranslate"><span class="pre">Data_Fusion.match_data_county()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Data_Fusion.Data_Fusion.merge_images_y"><code class="docutils literal notranslate"><span class="pre">Data_Fusion.merge_images_y()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Data_Fusion.Data_Fusion.open_code"><code class="docutils literal notranslate"><span class="pre">Data_Fusion.open_code()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Details.html">2. Data_Fusion Details</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utils module</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Utils.html">1. Utils Class</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Directory Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Directory.html">1. Directory Structure</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Binv</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1. </span>Data_Fusion Class</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Data_Fusion.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="data-fusion-class">
+<h1><span class="section-number">1. </span>Data_Fusion Class<a class="headerlink" href="#data-fusion-class" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="Data_Fusion.Data_Fusion">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Data_Fusion.</span></span><span class="sig-name descname"><span class="pre">Data_Fusion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cwd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Data_Fusion.Data_Fusion" title="Link to this definition"></a></dt>
+<dd><p>Inventory class to initialize the Inventory method. It also downloads the US county borders from &lt;<a class="reference external" href="https://public.opendatasoft.com/explore/dataset/us-county-boundaries/download/?format=geojson&amp;timezone=America/New_York&amp;lang=en">https://public.opendatasoft.com/explore/dataset/us-county-boundaries/download/?format=geojson&amp;timezone=America/New_York&amp;lang=en</a>&gt;`,
+with the FIPS codes and County names included, as those will be <strong>required</strong> later.
+All geometries are turned unto ESPG:4326, if not, throughout this module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cwd</strong> (<em>str</em>) – Path to the working directory.</p>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>cwd</strong> (<em>str</em>) – Stores the working directory path.</p></li>
+<li><p><strong>county_bound</strong> (<em>GeoDataFrame</em>) – Stores GeoDataFrame of US counties.</p></li>
+<li><p><strong>us_state_to_abbrev</strong> (<em>list</em>) – Stores a list of dictionary of US states to ther abbreviated names.</p></li>
+<li><p><strong>utils</strong> (<em>Class</em>) – Stores the utils class for future uses.</p></li>
+<li><p><strong>state_codes</strong> (<em>list</em>) – Stores a list of US state FIPS code.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="Data_Fusion.Data_Fusion.FEMA">
+<span class="sig-name descname"><span class="pre">FEMA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">State</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Save_County</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Data_Fusion.Data_Fusion.FEMA" title="Link to this definition"></a></dt>
+<dd><p>Method to store FEMA footprint data &lt;<a class="reference external" href="https://disasters.geoplatform.gov/USA_Structures/">https://disasters.geoplatform.gov/USA_Structures/</a>&gt;.
+respective directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>State</strong> (<em>String</em>) – User specified state.</p></li>
+<li><p><strong>Save_County</strong> (<em>Boolean</em>) – User specification to either save outputs for counties separately.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Data_Fusion.Data_Fusion.M_F_N_Fusion">
+<span class="sig-name descname"><span class="pre">M_F_N_Fusion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">State</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Coun_ty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Data_Fusion.Data_Fusion.M_F_N_Fusion" title="Link to this definition"></a></dt>
+<dd><p>Method to store Microsoft footprint data &lt;<a class="reference external" href="https://github.com/microsoft/USBuildingFootprints">https://github.com/microsoft/USBuildingFootprints</a>&gt; from the database &lt;<a class="reference external" href="https://minedbuildings.z5.web.core.windows.net/legacy/usbuildings-v2">https://minedbuildings.z5.web.core.windows.net/legacy/usbuildings-v2</a>&gt; for a given state in its
+respective directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>State</strong> (<em>String</em>) – User specified state.</p></li>
+<li><p><strong>Save_County</strong> (<em>Boolean</em>) – User specification to either save outputs for counties separately.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Data_Fusion.Data_Fusion.Microsoft">
+<span class="sig-name descname"><span class="pre">Microsoft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">State</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Save_County</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Data_Fusion.Data_Fusion.Microsoft" title="Link to this definition"></a></dt>
+<dd><p>Method to store Microsoft footprint data &lt;<a class="reference external" href="https://github.com/microsoft/USBuildingFootprints">https://github.com/microsoft/USBuildingFootprints</a>&gt; from the database &lt;<a class="reference external" href="https://minedbuildings.z5.web.core.windows.net/legacy/usbuildings-v2">https://minedbuildings.z5.web.core.windows.net/legacy/usbuildings-v2</a>&gt; for a given state in its
+respective directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>State</strong> (<em>String</em>) – User specified state.</p></li>
+<li><p><strong>Save_County</strong> (<em>Boolean</em>) – User specification to either save outputs for counties separately.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Data_Fusion.Data_Fusion.NSI">
+<span class="sig-name descname"><span class="pre">NSI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">State</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Save_County</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Data_Fusion.Data_Fusion.NSI" title="Link to this definition"></a></dt>
+<dd><p>Method to store NSI data &lt;<a class="reference external" href="https://nsi.sec.usace.army.mil/downloads/nsi_2022/">https://nsi.sec.usace.army.mil/downloads/nsi_2022/</a>&gt;.
+respective directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>State</strong> (<em>String</em>) – User specified state.</p></li>
+<li><p><strong>Save_County</strong> (<em>Boolean</em>) – User specification to either save outputs for counties separately.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Data_Fusion.Data_Fusion.Sat_Imag33e">
+<span class="sig-name descname"><span class="pre">Sat_Imag33e</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">State</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Save_County</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Coun_ty</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Aulb_KPorxtnPvP0B_FyrlE55rcIs8utL-CaxHID5nJwIB_7fXyKM64wGjlwlNfG'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">par</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'1'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Data_Fusion.Data_Fusion.Sat_Imag33e" title="Link to this definition"></a></dt>
+<dd><p>Method to store Microsoft footprint data &lt;<a class="reference external" href="https://github.com/microsoft/USBuildingFootprints">https://github.com/microsoft/USBuildingFootprints</a>&gt; from the database &lt;<a class="reference external" href="https://minedbuildings.z5.web.core.windows.net/legacy/usbuildings-v2">https://minedbuildings.z5.web.core.windows.net/legacy/usbuildings-v2</a>&gt; for a given state in its
+respective directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>State</strong> (<em>String</em>) – User specified state.</p></li>
+<li><p><strong>Save_County</strong> (<em>Boolean</em>) – User specification to either save outputs for counties separately.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Data_Fusion.Data_Fusion.Sat_Image">
+<span class="sig-name descname"><span class="pre">Sat_Image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cwd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">State</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Save_County</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Coun_ty</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">19</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Aulb_KPorxtnPvP0B_FyrlE55rcIs8utL-CaxHID5nJwIB_7fXyKM64wGjlwlNfG'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">par</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'1'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Data_Fusion.Data_Fusion.Sat_Image" title="Link to this definition"></a></dt>
+<dd><p>Method to find regions inside the chosen boundary that has footprints in them, build bounding boxes inside, and store satellite images asscoiated with the
+bounding boxes</p>
+<p>self,State,Save_County,Coun_ty,key=’Aulb_KPorxtnPvP0B_FyrlE55rcIs8utL-CaxHID5nJwIB_7fXyKM64wGjlwlNfG’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>State</strong> (<em>String</em>) – User specifies state name</p></li>
+<li><p><strong>Coun_ty</strong> (<em>List</em><em>[</em><em>Str</em><em>]</em>) – Optional list of county FIPS code to analyze. If empty, the method analyzes all FIPS in the state.</p></li>
+<li><p><strong>Save_County</strong> (<em>Boolean</em>) – User specification to either save outputs for counties separately.</p></li>
+<li><p><strong>zoom</strong> (<em>Integer</em>) – zoom level for the requested image (data).</p></li>
+<li><p><strong>L</strong> (<em>Integer</em>) – The user defined size of image in pixels. The Microsoft API does not guarantee all L values, see below on how the code deal with the matter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Paramm String key<span class="colon">:</span></dt>
+<dd class="field-even"><p>Microsoft API key to access its data sources &lt;”<a class="reference external" href="https://www.bingmapsportal.com/Announcement?redirect=True">https://www.bingmapsportal.com/Announcement?redirect=True</a>”&gt;. Request for key: &lt;”<a class="reference external" href="https://www.bingmapsportal.com/Application">https://www.bingmapsportal.com/Application</a>”&gt;.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Data_Fusion.Data_Fusion.col_names">
+<span class="sig-name descname"><span class="pre">col_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Mc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['_x',</span> <span class="pre">'_y']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Data_Fusion.Data_Fusion.col_names" title="Link to this definition"></a></dt>
+<dd><p>Method to help with managing column names wile fusing datasources.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gd</strong> (<em>Geodataframe</em>) – geo-data</p></li>
+<li><p><strong>Mc</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – List of initial Microsoft data columns.</p></li>
+<li><p><strong>Fc</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – List of initial FEMA data columns.</p></li>
+<li><p><strong>Nc</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – List of initial NSI data columns.</p></li>
+<li><p><strong>suffix</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – A list column name extensions to be removed that “merge” or “sjoin” function add. ‘_x’ and ‘_y’ for merge, and ‘_left’, ‘_right’ for sjoin</p></li>
+<li><p><strong>extra</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – Other column names the user wants to retain in the fused data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Data_Fusion.Data_Fusion.match_data_county">
+<span class="sig-name descname"><span class="pre">match_data_county</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gd_C</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">State_Ab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Save_County</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Data_Fusion.Data_Fusion.match_data_county" title="Link to this definition"></a></dt>
+<dd><p>Given a geodataframe, the state abbreviated name and the county boudaries, add two FIPS and County (name) columns to the data and save
+it both as a whole and for each county (inside the respective folder) if opted in by the user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gd</strong> (<em>GeoDataFrame</em>) – A Geodataframe of points or polygons.</p></li>
+<li><p><strong>gd_C</strong> (<em>GeoDataFrame</em>) – County (US) boundaries.</p></li>
+<li><p><strong>State_Ab</strong> (<em>String</em>) – Abbreviated state name.</p></li>
+<li><p><strong>Save_County</strong> (<em>Boolean</em>) – User specification to save at county level or not, pre-set as True</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Data_Fusion.Data_Fusion.merge_images_y">
+<span class="sig-name descname"><span class="pre">merge_images_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Data_Fusion.Data_Fusion.merge_images_y" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Data_Fusion.Data_Fusion.open_code">
+<span class="sig-name descname"><span class="pre">open_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">11</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Data_Fusion.Data_Fusion.open_code" title="Link to this definition"></a></dt>
+<dd><p>Method to return the Openlocationcode &lt;<a class="reference external" href="https://github.com/google/open-location-code">https://github.com/google/open-location-code</a>&gt;` given a level and a Geodataframe (geo- points or polygon centroids). it also adds a tie-breaker in case of repetition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gd</strong> (<em>GeoDataFrame</em>) – A Geodataframe of points or polygons.</p></li>
+<li><p><strong>level</strong> (<em>Integer</em>) – defines the open-location-code level, pre-set on 11.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The openlocation codes as a list for the given Geodataframe (centroids)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Objective.html" class="btn btn-neutral float-left" title="Objective" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Details.html" class="btn btn-neutral float-right" title="2. Data_Fusion Details" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Hesam.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
