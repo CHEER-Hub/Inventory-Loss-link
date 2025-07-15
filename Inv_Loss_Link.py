@@ -745,7 +745,7 @@ class Inventory_Loss():
             else:
                 zone_id='zone_id'
                 zones[zone_id]=np.arange(0,len(zones),1)
-            a=input('aa')
+
             # Make directory to save
             self.mk_dir(os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,'Zones'))
             self.mk_dir(os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,'Zones',zone))
