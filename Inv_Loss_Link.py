@@ -39,7 +39,7 @@ class Inventory_Loss():
     :ivar dict self.flood_depth_to_id: Maps flood depth (in inches) to corresponding IDs per CHEER-Safe design. Details: (https://drive.google.com/file/d/1-WWQ8dlrGdlFFntmMYnycoKeb2VsvSrk/view?usp=drive_link)
     :ivar list[float] self.damage_levels: A list of 50 damage state ratios (from 0% to 140%) representing loss relative to the structure’s nominal value. Details: (https://drive.google.com/file/d/1-WWQ8dlrGdlFFntmMYnycoKeb2VsvSrk/view?usp=drive_link)
     """
-    def __init__(self,cwd:str = '.', Download: bool =True) -> None:
+    def __init__(self,cwd:str = './', Download: bool =True) -> None:
         self.cwd=cwd
 
         # Download the sample file to run the code
@@ -546,7 +546,7 @@ class Inventory_Loss():
         W_ind: int = 3,
         I_ind: int = 4,
         Tr_F: float = 39.3701,
-        Tr_I: float = 2.23694,
+        Tr_W: float = 2.23694,
         Average_Mode: str = 'Inverse_d4',
         Mode: str = ''
     ) -> None:
@@ -685,7 +685,7 @@ class Inventory_Loss():
 
 
 
-    def Loss_estimate(self, cwd_haz: str, cwd_inv: str, zone: str = '') -> None:
+    def Loss_estimate(self, cwd_haz: str, cwd_inv: str, zone: str = '', zone_id: str = '') -> None:
         """
         Estimates loss values (in million dollars) at various spatial levels based on a given inventory and hazard scenario.
         This function relies on prior computations (e.g., hazard-to-building mapping, configuration lookup, etc.)
@@ -696,6 +696,7 @@ class Inventory_Loss():
                             documentation for placement requirements.
         :param str zone: Optional. Name of a `.shp` or `.parquet` file defining zone boundaries of interest.
                         If provided, losses are aggregated at the zone level.
+        :param str zone_id: Optional. the name of the column containing unqiue zone_ids, defined by user.
         :returns: None. The method stores loss estimates in output files. See :ref:`dir-section` for details.
         :rtype: None
         """
@@ -706,8 +707,9 @@ class Inventory_Loss():
         with open(os.path.join(self.cwd,'Intermediate_outputs','lookup_N.pkl'), 'rb') as f:
             dic=pickle.load(f)
 
-        #A list to store the Inventory damage summation in B$
+        #A list to store the Inventory damage summation in M
         DT=[]
+
         #A list to keep the track of hazard incident names
         Name=[]
 
@@ -718,14 +720,12 @@ class Inventory_Loss():
         # Build the required directories
         self.mk_dir(os.path.join(self.cwd,'Loss_estimates'))
         self.mk_dir(os.path.join(self.cwd,'Loss_estimates',cwd_haz))
-        self.mk_dir(os.path.join(self.cwd,'Loss_estimates',cwd_haz,'Inventory'))
-        self.mk_dir(os.path.join(self.cwd,'Loss_estimates',cwd_haz,'Inventory',cwd_inv.replace('.parquet','')))
+        self.mk_dir(os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv))
 
         # Build the for user-friendly .csv files
         self.mk_dir(os.path.join(self.cwd,'User_Output'))
         self.mk_dir(os.path.join(self.cwd,'User_Output',cwd_haz))
-        self.mk_dir(os.path.join(self.cwd,'User_Output',cwd_haz,'Inventory'))
-        self.mk_dir(os.path.join(self.cwd,'User_Output',cwd_haz,'Inventory',cwd_inv.replace('.parquet','')))
+        self.mk_dir(os.path.join(self.cwd,'User_Output',cwd_haz,cwd_inv))
 
         # If zone level is requested
         if len(zone)>0:
@@ -740,61 +740,69 @@ class Inventory_Loss():
                 print('The chosen zone does not exist')
                 zone_computation=False
         if zone_computation:
+            if len(zone_id)>0:
+                pass
+            else:
+                zone_id='zone_id'
+                zones[zone_id]=np.arange(0,len(zones),1)
             # Make directory to save
-            self.mk_dir(os.path.join(self.cwd,'Loss_estimates',cwd_haz,'Inventory',cwd_inv.replace('.parquet',''),'Zones'))
-            self.mk_dir(os.path.join(self.cwd,'Loss_estimates',cwd_haz,'Inventory',cwd_inv.replace('.parquet',''),'Zones',zone))
+            self.mk_dir(os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,'Zones'))
+            self.mk_dir(os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,'Zones',zone))
+
             # For user firendly files
-            self.mk_dir(os.path.join(self.cwd,'User_Output',cwd_haz,'Inventory',cwd_inv.replace('.parquet',''),'Zones'))
-            self.mk_dir(os.path.join(self.cwd,'User_Output',cwd_haz,'Inventory',cwd_inv.replace('.parquet',''),'Zones',zone))
+            self.mk_dir(os.path.join(self.cwd,'User_Output',cwd_haz,cwd_inv,'Zones'))
+            self.mk_dir(os.path.join(self.cwd,'User_Output',cwd_haz,cwd_inv,'Zones',zone))
 
         for l in tqdm(L,desc='Hazard instances:'):
+            #Hazard instance name
+            haz_n=l.replace('Inv_','').replace('.parquet','')
+
             # Read the Wind and Flood depth, for the iventory, given a hazard scednario
-            W_F=pd.read_parquet(os.path.join(Inv_dir,l))#
+            W_F=pd.read_parquet(os.path.join(Inv_dir,l))
+
             #print(np.mean(W_F['Wind_Tr']))
             W_F[['geometry','val_struct_col']]=Inv[['geometry','val_struct_col']]
             W_F = gpd.GeoDataFrame(W_F, geometry='geometry')
             W_F.set_crs(Inv.crs, inplace=True)
+
             # Employ the Z-based lookup table to read global damage state (01-140% damage).
             W_F['Damage_ratio']=W_F[['Wind_Tr','Flood_Tr','Z']].apply(lambda x: dic[x['Z']][int(x['Wind_Tr']-1),int(x['Flood_Tr']-1)],axis=1)
-            W_F['Loss(B$)']=W_F['Damage_ratio']*W_F['val_struct_col']
+            W_F['Loss(M)']=W_F['Damage_ratio']*W_F['val_struct_col']/1000000
             Name.append((l.replace('.parquet','')).replace('Inv_',''))
-            DT.append(np.sum(W_F['Loss(B$)']/1000000000))
+            DT.append(np.sum(W_F['Loss(M)']))
 
-            W_F[['Damage_ratio','Loss(B$)']].to_parquet(os.path.join(self.cwd,'Loss_estimates',cwd_haz,'Inventory',cwd_inv.replace('.parquet',''),l))
+            W_F[['Damage_ratio','Loss(M)']].to_parquet(os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,haz_n+'.parquet'))
 
             if zone_computation:
-                zones.to_crs("EPSG:4326", inplace=True)
-                zones = zones.reset_index(drop=True)
-                zones['zone_id'] = zones.index
+                zone_copy=zones.copy()
+                zone_copy.to_crs("EPSG:4326", inplace=True)
 
                 # Spatial join: assign each point in Inv to a zone
                 W_F_centroids = gpd.GeoDataFrame(W_F, geometry='geometry',crs=Inv.crs)
-                W_F_centroids['geometry'] = Inv.geometry.centroid
-                joined = gpd.sjoin(W_F_centroids, zones[['zone_id', 'geometry']], predicate='within', how='left')
-
-                # Group by zone_id to compute sum of loss and count
-                agg = joined.groupby('zone_id').agg(
-                    Z_sum=('Loss(B$)', 'sum'),
-                    N_count=('Loss(B$)', 'count')
-                ).reindex(zones['zone_id'], fill_value=0)
-
-                # Extract results
-                zones['Loss(B$)'] = agg['Z_sum'].values
-                zones['N'] = agg['N_count'].values
+                W_F_centroids['geometry'] = W_F_centroids.centroid
+                crs=zone_copy.crs
+                W_F_centroids=W_F_centroids.set_crs(crs)
+                #match and count the number of strcutures in each zone and loss per zone
+                joined=W_F_centroids.sjoin(zone_copy)
+                joint=joined.groupby(zone_id)['Loss(M)'].sum()
+                dict_zone_loss=dict(zip(joint.index,joined.groupby(zone_id)['Loss(M)'].sum()))
+                joint=joined.groupby(zone_id)[zone_id].count()
+                dict_zone_N=dict(zip(joint.index,joint))
+                zone_copy['Loss(M)']=zone_copy[zone_id].map(dict_zone_loss).fillna(0)
+                zone_copy['N']=zone_copy[zone_id].map(dict_zone_N).fillna(0)
                 
-                zones.to_parquet(os.path.join(self.cwd,'Loss_estimates',cwd_haz,'Inventory',cwd_inv,'Zones',zone,l))
-                zones[['zone_id','Loss(B$)']].to_csv(os.path.join(self.cwd,'User_Output',cwd_haz,'Inventory',cwd_inv.replace('.parquet',''),'Zones',zone,l.replace('.parquet','.csv')))
-                
-        Loss_df=pd.DataFrame({'Hazard':Name,'Loss (B$)':DT})
-        Loss_df.to_parquet(os.path.join(self.cwd,'Loss_estimates',cwd_haz,'Inventory',cwd_inv,'Loss_DF.parquet'))
+                zone_copy.to_parquet(os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,'Zones',zone,l))
+                zone_copy[[zone_id,'Loss(M)']].to_csv(os.path.join(self.cwd,'User_Output',cwd_haz,cwd_inv,'Zones',zone,haz_n+'.csv'))
+        Loss_df=pd.DataFrame({'Hazard':Name,'Loss (M)':DT})
+        Loss_df.to_parquet(os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,'Loss_DF.parquet'))
 
         #Also save it as .csv, for users
-        Info=pd.DataFrame({'Hazard':['Total Buildings:'],'Loss (B$)':len(W_F)})
-        pd.concat((Loss_df,Info)).to_csv(os.path.join(self.cwd,'User_Output',cwd_haz,'Inventory',cwd_inv,'Loss_DF.csv'))
+        Info=pd.DataFrame({'Hazard':['Total Buildings:'],'Loss (M)':len(W_F)})
+        pd.concat((Loss_df,Info)).to_csv(os.path.join(self.cwd,'User_Output',cwd_haz,cwd_inv,'Loss_DF.csv'))
+        print('Inventory-level are stored at:\t',os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv))
 
         #Sort zones files, if any for users as csv
         if zone_computation:
-            zones[['zone_id','N']].to_csv(os.path.join(self.cwd,'User_Output',cwd_haz,'Inventory',cwd_inv.replace('.parquet',''),'Zones',zone,'zones_id_N.csv'))
-            print('Inventory-level are stored at:\t',os.path.join(self.cwd,'Loss_estimates',cwd_haz,'Inventory',cwd_inv.replace('.parquet','')))
-        if zone_computation:
-            print('zone-level are stored at:\t',os.path.join(self.cwd,'Loss_estimates',cwd_haz,'Inventory',cwd_inv,'Zones',zone.replace('.shp','')))
+            zone_copy[[zone_id,'N']].to_csv(os.path.join(self.cwd,'User_Output',cwd_haz,cwd_inv,'Zones','zone_N.csv'))
+            
+            print('zone-level are stored at:\t',os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,'Zones',zone))
