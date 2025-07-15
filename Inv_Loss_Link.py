@@ -803,6 +803,4 @@ class Inventory_Loss():
 
         #Sort zones files, if any for users as csv
         if zone_computation:
-            zone_copy[[zone_id,'N']].to_csv(os.path.join(self.cwd,'User_Output',cwd_haz,cwd_inv,'Zones','zone_N.csv'))
-            
             print('zone-level are stored at:\t',os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,'Zones',zone))
