@@ -1,0 +1,45 @@
+.. Inventory_Loss_Link documentation master file, created by
+   sphinx-quickstart on Fri Jun 27 11:21:18 2025.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+.. _avg-inputs:
+
+Input Data Details
+------------------
+
+**Upon instantiating the `Inventory_Loss_Link` class, users may opt to download sample data to test the code. These samples also serve as references for the required data format.**
+
+The Inventory-Loss Link model operates with four main inputs:
+
+1. **Building Inventory**
+   - The inventory must contain valid geopolygon geometries under the `"geometry"` column and be in either `.parquet` or `.shp` format.
+   - Inventories with missing values are not recommended; such entries may be dropped during processing.
+   - The inventory should include columns that specify the following attributes:
+     1. Whether a building is wooden,
+     2. Whether the residence is single-family,
+     3. Whether there is an attached garage,
+     4. Building stories (at least a distinction between 1- and 2-story buildings),
+     5. Distance to the coastline (for North Carolina),
+     6. Year the structure was built.
+   - All these columns may solely contain the desired attribute.
+   - These columns can have arbitrary names and labels; users can define their mappings when calling the appropriate functions (see :ref:`class-section`).
+
+2. **Damage Lookup Table**
+   - If the damage lookup tables are generated using the CHEER-Safe model, users simply need to copy them into the `CHEER_Safe_data` folder (see the :ref:`dir-section`).
+   - Based on the component-based loss calculation approach in CHEER-Safe, these tables map combinations of `[M, C]` and `[Wind_ID, Flood_ID]` to damage probabilities across 50 damage states.
+   - For more details, refer to the [CHEER-Safe GitHub page](https://github.com/CHEER-Hub/LossModel).
+
+3. **Hazard Data**
+   - Given the hurricane-centric nature of the CHEER-Safe model, hazard data must include at least:
+     - A column for wind speed
+     - A column for flood depth
+   - The exact names of these columns can be specified by the user when calling the relevant functions.
+   - Hazard data must be placed inside the `Hazards` folder in the `Inventory_Loss_Link` directory (see the :ref:`dir-section`). Each hazard scenario should be contained within a single folder and consist of one or more shapefiles.
+   - The folder name will be used later in the code to reference the specific hazard dataset.
+
+4. **Zones (Optional)**
+   - Zones are single `.shp` or `.parquet` files containing one or more polygons representing geographic zones.
+   - Each file should include the entire zone system (i.e., not one file per polygon).
+   - The `Zones` folder is designated for storing zone files. Users can refer to each file by the name they assigned during import.
+

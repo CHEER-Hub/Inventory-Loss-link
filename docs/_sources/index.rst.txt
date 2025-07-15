@@ -24,6 +24,13 @@ Inventory-Loss Link documentation
    Data_Fusion
 
 .. toctree::
+   :caption: Input Data Specifications
+   :maxdepth: 1
+   :numbered: 4
+
+   Inputs
+
+.. toctree::
    :caption: Module Details
    :maxdepth: 1
    :numbered: 4
