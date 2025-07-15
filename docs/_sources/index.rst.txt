@@ -10,6 +10,8 @@ Fortuna documentation
 
     The documentation above outlines the various modules implemented within the 
     <strong>F</strong>ramew<strong>o</strong>rk for La<strong>R</strong>ge-Scale Infrastructure Inven<strong>T</strong>ory Generation for <strong>U</strong>rban <strong>N</strong>atural Hazard <strong>A</strong>nalysis (FORTUNA), available at <a href="https://github.com/CHEER-Hub/Fortuna">https://github.com/CHEER-Hub/Fortuna</a>. The repository also includes Jupyter Notebooks demonstrating practical applications.
+      
+
 
 .. toctree::
    :maxdepth: 1

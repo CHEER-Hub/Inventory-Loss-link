@@ -7,11 +7,10 @@
 Objective
 ---------
 
-The objective of **Binv** is to establish a building inventory for large-scale hazard assessment and simulation studies. The Binv framework is structured as shown in the following image.
+The objective of the FORTUNA-Link module is to combine the CHEER-Safe outputs (configuration lookup tables) and FORTUNA's building (-level) inventory given hurricane hazard scenarios (wind speed and flood depth at any grid system) to estimate losses at various levels.
 
 .. image:: fram.png
-   :alt: Binv framework
+   :alt: FORTUNA - CHEER-Safe link
    :align: center
    :width: 400px
 
-The figure above shows the architecture of the proposed model. Accordingly, **Binv** is built upon three main components: **data fusion**, **feature enhancement**, and **data imputation**, with the overarching goal of ensuring both **comprehensiveness in feature representation** and **completeness in captured entities**.
