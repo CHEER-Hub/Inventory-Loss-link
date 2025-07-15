@@ -1,0 +1,202 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1. Directory Structure &mdash; Inventory-CHEER_Safe Link 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=2709fde1"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="2. Hazard_Inv_map Details" href="Details1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Inventory-CHEER_Safe Link
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Objective</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Objective.html">Objective</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Inventory_Loss Link module</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Data_Fusion.html">1. Inventory-Loss-Link Class</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Module Details</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Details.html">1. Define_new_table Details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Details1.html">2. Hazard_Inv_map Details</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Directory Guide</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Directory Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#directory-description">1.1. Directory Description</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Inventory-CHEER_Safe Link</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1. </span>Directory Structure</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Directory.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="directory-structure">
+<span id="dir-section"></span><h1><span class="section-number">1. </span>Directory Structure<a class="headerlink" href="#directory-structure" title="Link to this heading"></a></h1>
+<p>The “cwd” parameter defined by the user at the instantiation of the Loss module becomes the root of the Loss model output directory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cwd/
+├── CHEER_Safe_data/   [C]
+│   ├── All_configs.csv/  [C-1]
+│   ├── &quot;Lookup&quot;.pkl/  [C-2]
+├── Hazards/    [H]
+│   ├── Hazard_Name    [H-1]
+│      ├── &quot;hazard x&quot;.parquet-.shp [H-1-1]
+├── Inventory/    [I]
+│      ├── Inventory Y.parquet-.shp  [I-1]
+├── Test/    [T]
+├── Intermediate_outputs/    [IO]
+├── Inv_Updated_Hazard/    [IU]
+├── Loss_estimates/    [L]
+    ├── Hazard_X/    [L-1]
+        ├── Inventory_Y/    [L-1-1]
+            ├── &quot;hazard_x&quot;.parquet    [L-1-1-1]
+            ├── zones/    [L-1-1-2]
+                ├── zone z/    [L-1-1-2-1]
+                    ├── &quot;hazard_x&quot;.parquet    [L-1-1-2-1-1]
+├── User_Output/    [UO]
+    ├── Hazard_X/    [UO-1]
+        ├── Inventory_Y/    [UO-1-1]
+            ├── &quot;hazard_x&quot;.csv    [UO-1-1-1]
+            ├── zones/    [UO-1-1-2]
+                ├── zone z/    [UO-1-1-2-1]
+                    ├── &quot;hazard_x&quot;.csv    [UO-1-1-2-1-1]
+</pre></div>
+</div>
+<section id="directory-description">
+<h2><span class="section-number">1.1. </span>Directory Description<a class="headerlink" href="#directory-description" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><ol class="upperalpha simple" start="3">
+<li><p><strong>CHEER_Safe_data/</strong>: Directory that contains necessary files to conduct the loss evaluation.</p></li>
+</ol>
+</li>
+<li><p>C-1. <strong>All_configs.csv</strong>: A .csv file containing all configs in the loss model. Herein, that would be 8 M values, 2 categoreis of distance from the coast line, 3 categories for year built, summing to 48 instances. Included in the download options, and must be renewed if a new loss model is developed.</p></li>
+<li><p>C-2. <strong>“Lookup”.pkl</strong>: The lookup table [M,C][Wind,Flood] -&gt; loss produced by the CHEER-Safe model. A lite version is in the sampel file and users may input new ones here.</p></li>
+<li><ol class="upperalpha simple" start="8">
+<li><p><strong>Hazards/</strong>: The folder for users to put their “Hazard” files.</p></li>
+</ol>
+</li>
+<li><p>H-1. <strong>Hazard X/</strong>: The folder for a given <strong>Hazard X</strong>, like the TC_Wise hazard.</p></li>
+<li><p>H-1-1. <strong>“hazard x.parquet-shp</strong>: The <strong>.shp</strong> or <strong>.parquet</strong> file containing the <strong>hazard x</strong>’s (an instance of Hazard X) data intensities at control points, i.e., geo-data-points.</p></li>
+<li><ol class="upperroman simple">
+<li><p><strong>Inventory/</strong>: The folder for users to put their inventory files.</p></li>
+</ol>
+</li>
+<li><p>I-1. <strong>“Inventory Y.parquet or .shp</strong>: Invetory files as .shp or .parquet files for a given <strong>inventory y</strong>, must be imputed and contain no missing values. If it does, those ros would be deleted.</p></li>
+<li><ol class="upperalpha simple" start="20">
+<li><p><strong>“Test/</strong>: A folder containing some sample test data if the user opts for downloading them, disposable at various functions described in this documentation.</p></li>
+</ol>
+</li>
+<li><p>IO. <strong>“Intermediate_outputs/</strong>: A folder that the loss module saves some <strong>intermediate</strong> output in.</p></li>
+<li><p>IU. <strong>“Inv_Updated_Hazard/</strong>: A folder that the loss module saves some inventory-related <strong>intermediate</strong> output in.</p></li>
+<li><ol class="upperalpha simple" start="26">
+<li><p><strong>zones/</strong>: Users can put their zone boundaries.</p></li>
+</ol>
+</li>
+<li><p>Z-1. <strong>zone z.parquet-.shp</strong>: the <strong>zone z</strong> input by users, for example a LeapHi raster.</p></li>
+<li><ol class="upperalpha simple" start="12">
+<li><p><strong>Loss_estimates/</strong>: The folder for the loss model to store the final loss estimates.</p></li>
+</ol>
+</li>
+<li><p>L-1. <strong>“Hazard X/”</strong>: The loss model creates a folder for each Hazard X it conducts the analysis for, e.g., TC-Wise.</p></li>
+<li><p>L-1-1. <strong>“Inventory_Y”</strong>: For <strong>Hazard X</strong>, and for <strong>inventory Y</strong>, a folder is created.</p></li>
+<li><p>L-1-1-1. <strong>“hazard_x.parquet-.shp”</strong>: For a hazard instance x and for inventory Y, the losses in M$ for all enteries is saved.</p></li>
+<li><p>L-1-1-2. <strong>“zones/”</strong>: If user also designated a zone system to store the losses, the “zones” folder is created.</p></li>
+<li><p>L-1-1-2-1. <strong>“zone-x/”</strong>: <strong>zone z</strong> is the zone name the user defined, for example any of LeapHi zones.</p></li>
+<li><p>L-1-1-1-2. <strong>“hazard_x.parquet-.shp”</strong>: For a <strong>hazard_x</strong> instance in <strong>Hazard X</strong>, and for <strong>inventory Y</strong> and <strong>zone z</strong>, the losses in M$ for all enteries in <strong>zone z</strong> is saved.</p></li>
+<li><p>UO. <strong>User_output/</strong>: The folder for the loss model to store final loss estimates but in more user-friendly (summarized) and .csv format.</p></li>
+<li><p>UO-1. <strong>“Hazard instance X/”</strong>: The loss model creates a folder of each Hazard instance X it conducts the analysis for.</p></li>
+<li><p>UO-1-1. <strong>“Inventory_Y”</strong>: For <strong>Hazard X</strong>, and for <strong>inventory Y</strong>, a folder is created.</p></li>
+<li><p>UO-1-1-1. <strong>“hazard_x.parquet-.shp”</strong>: For a hazard instance x and for inventory Y, the losses in M$ for all enteries is saved.</p></li>
+<li><p>UO-1-1-2. <strong>“zones/”</strong>: If user also designated a zone system to store the losses, the “zones” folder is created.</p></li>
+<li><p>UO-1-1-2-1. <strong>“zone z/”</strong>: <strong>zone z</strong> is the zone sytem the user defined.</p></li>
+<li><p>UO-1-1-2-1-1. <strong>“hazard x”.csv”</strong>: For a <strong>hazard_x</strong> instance in <strong>Hazard X</strong>, and for <strong>inventory Y</strong>, under the <strong>zone z</strong>, the loss estimates are stored as M$ for each each zone in <strong>zone z</strong> as M$.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Details1.html" class="btn btn-neutral float-left" title="2. Hazard_Inv_map Details" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Hesam.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
