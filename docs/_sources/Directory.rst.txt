@@ -1,42 +1,69 @@
+.. _dir-section:
+
 Directory Structure
 ===================
 
-The `Inventory` directory is the root of the data system. It organizes files into logically separated subdirectories for efficient access and processing throughout the pipeline. The structure is as follows:
-
+The "cwd" parameter defined by the user at the instantiation of the Loss module becomes the root of the Loss model output directory.
 ::
 
-    Inventory/
-    ├── Raw data/   [R1]
-    │   ├── State/  [R2]     
-    │      ├── FIPS/    [R3] 
-    │         ├── fips_building_microsoft.prquet    [R4]
-    │         ├── fips_building_fema.prquet [R5]
-    │         ├── fips_building_nsi.prquet  [R6]
-    │      ├── Microspft.prquet [R7]
-    │      ├── Fema.prquet  [R8]
-    │      ├── NSI.prquet   [R9] 
-    ├── Transitory data/    [T1]
-    │   ├── State/
-    │      ├── FIPS/
-    │         ├── fips_F_M.prquet   [T2]
-    │         ├── fips_F_M_N.prquet [T3]
-    │         ├── Fusion_stat.txt   [T4]
+    cwd/
+    ├── CHEER_Safe_data/   [C]
+    │   ├── All_configs.csv/  [C-1]   
+    │   ├── "Lookup".pkl/  [C-2]       
+    ├── Hazards/    [H] 
+    │   ├── Hazard_Name    [H-1]
+    │      ├── "hazard x".parquet-.shp [H-1-1]
+    ├── Inventory/    [I] 
+    │      ├── Inventory Y.parquet-.shp  [I-1]
+    ├── Test/    [T] 
+    ├── Intermediate_outputs/    [IO] 
+    ├── Inv_Updated_Hazard/    [IU] 
+    ├── Loss_estimates/    [L]
+        ├── Hazard_X/    [L-1]
+            ├── Inventory_Y/    [L-1-1]
+                ├── "hazard_x".parquet    [L-1-1-1]
+                ├── zones/    [L-1-1-2]
+                    ├── zone z/    [L-1-1-2-1]
+                        ├── "hazard_x".parquet    [L-1-1-2-1-1]
+    ├── User_Output/    [UO]
+        ├── Hazard_X/    [UO-1]
+            ├── Inventory_Y/    [UO-1-1]
+                ├── "hazard_x".csv    [UO-1-1-1]
+                ├── zones/    [UO-1-1-2]
+                    ├── zone z/    [UO-1-1-2-1]
+                        ├── "hazard_x".csv    [UO-1-1-2-1-1]
 
-Description
+
+    
+Directory Description
 -----------
 
-- R1. **Raw_data/**: Directory Containing pre-processed datasources, herein FEMA, Microsoft and NSI.
-- R2. **State/**: Data are stored in respective folders labeled with their abbreviate names, e.g., Delaware: DE.
-- R3. **FIPS/**: Each state folder is divided into its respective county FIPS code.
-- R4. **fips_building_microsoft.prquet**: Pre-processed Microsoft data for each FIPS code.
-- R5. **fips_building_fema.prquet**: Pre-processed FEMA data for each FIPS code.
-- R6. **fips_building_nsi.prquet**: Pre-processed NSI data for each FIPS code.
-- R7. **Microspft.prquet**: The merged FEMA data for the whole State.
-- R8. **FEMA.prquet**: The merged Microsoft data for the whole State.
-- R9. **NSI.prquet**: The merged Microsoft data for the whole State.
-- T1. **Transitory_data/**: Directory Containing processed data obtained from two or more of the datasources.
-- T2. **fips_F_M.prquet**: Microsoft-FEMA fused data for each FIPS code.
-- T3. **fips_F_M_N.prquet**: Microsoft-FEMA-NSI fused data for each FIPS code.
-- T4. **Fusion_stat.txt**: Data fusion process statistics.
+- C. **CHEER_Safe_data/**: Directory that contains necessary files to conduct the loss evaluation. 
+- C-1. **All_configs.csv**: A .csv file containing all configs in the loss model. Herein, that would be 8 M values, 2 categoreis of distance from the coast line, 3 categories for year built, summing to 48 instances. Included in the download options, and must be renewed if a new loss model is developed.
+- C-2. **"Lookup".pkl**: The lookup table [M,C][Wind,Flood] -> loss produced by the CHEER-Safe model. A lite version is in the sampel file and users may input new ones here.
+- H. **Hazards/**: The folder for users to put their "Hazard" files.
+- H-1. **Hazard X/**: The folder for a given **Hazard X**, like the TC_Wise hazard.
+- H-1-1. **"hazard x.parquet-shp**: The **.shp** or **.parquet** file containing the **hazard x**'s (an instance of Hazard X) data intensities at control points, i.e., geo-data-points.
+- I. **Inventory/**: The folder for users to put their inventory files.
+- I-1. **"Inventory Y.parquet or .shp**: Invetory files as .shp or .parquet files for a given **inventory y**, must be imputed and contain no missing values. If it does, those ros would be deleted.
+- T. **"Test/**: A folder containing some sample test data if the user opts for downloading them, disposable at various functions described in this documentation.
+- IO. **"Intermediate_outputs/**: A folder that the loss module saves some **intermediate** output in.
+- IU. **"Inv_Updated_Hazard/**: A folder that the loss module saves some inventory-related **intermediate** output in.
+- Z. **zones/**: Users can put their zone boundaries.
+- Z-1. **zone z.parquet-.shp**: the **zone z** input by users, for example a LeapHi raster.
+- L. **Loss_estimates/**: The folder for the loss model to store the final loss estimates.
+- L-1. **"Hazard X/"**: The loss model creates a folder for each Hazard X it conducts the analysis for, e.g., TC-Wise.
+- L-1-1. **"Inventory_Y"**: For **Hazard X**, and for **inventory Y**, a folder is created.
+- L-1-1-1. **"hazard_x.parquet-.shp"**: For a hazard instance x and for inventory Y, the losses in M$ for all enteries is saved.
+- L-1-1-2. **"zones/"**: If user also designated a zone system to store the losses, the "zones" folder is created.
+- L-1-1-2-1. **"zone-x/"**: **zone z** is the zone name the user defined, for example any of LeapHi zones.
+- L-1-1-1-2. **"hazard_x.parquet-.shp"**: For a **hazard_x** instance in **Hazard X**, and for **inventory Y** and **zone z**, the losses in M$ for all enteries in **zone z** is saved.
+- UO. **User_output/**: The folder for the loss model to store final loss estimates but in more user-friendly (summarized) and .csv format.
+- UO-1. **"Hazard instance X/"**: The loss model creates a folder of each Hazard instance X it conducts the analysis for.
+- UO-1-1. **"Inventory_Y"**: For **Hazard X**, and for **inventory Y**, a folder is created.
+- UO-1-1-1. **"hazard_x.parquet-.shp"**: For a hazard instance x and for inventory Y, the losses in M$ for all enteries is saved.
+- UO-1-1-2. **"zones/"**: If user also designated a zone system to store the losses, the "zones" folder is created.
+- UO-1-1-2-1. **"zone z/"**: **zone z** is the zone sytem the user defined.
+- UO-1-1-2-1-1. **"hazard x".csv"**: For a **hazard_x** instance in **Hazard X**, and for **inventory Y**, under the **zone z**, the loss estimates are stored as M$ for each each zone in **zone z** as M$.
 
-Note: The `Inventory` directory is typically assumed to be the current working directory (cwd), assgned by the user as parameter "cwd" in the code. 
+

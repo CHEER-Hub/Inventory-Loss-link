@@ -4,15 +4,13 @@
    contain the root `toctree` directive.
 
 
-Data_Fusion Class
+Inventory-Loss-Link Class
 ---------------
 
-.. autoclass:: Data_Fusion.Data_Fusion
+A sample Jupyter notebook is availabe at the GitHub repo ('<https://github.com/CHEER-Hub/Inventory-Loss-link/tree/main>_') to run this class with the sample data.
+
+.. autoclass:: Inv_Loss_Link.Inventory_Loss
    :members:
    :undoc-members:
 
-
-.. autoclass:: FusionPDf
-   :members:
-   :undoc-members:
 

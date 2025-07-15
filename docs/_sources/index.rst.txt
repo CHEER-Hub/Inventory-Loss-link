@@ -3,15 +3,12 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Fortuna documentation
+Inventory-Loss Link documentation
 ==================
 
 .. raw:: html
 
-    The documentation above outlines the various modules implemented within the 
-    <strong>F</strong>ramew<strong>o</strong>rk for La<strong>R</strong>ge-Scale Infrastructure Inven<strong>T</strong>ory Generation for <strong>U</strong>rban <strong>N</strong>atural Hazard <strong>A</strong>nalysis (FORTUNA), available at <a href="https://github.com/CHEER-Hub/Fortuna">https://github.com/CHEER-Hub/Fortuna</a>. The repository also includes Jupyter Notebooks demonstrating practical applications.
-      
-
+.. The documentation above outlines the various modules implemented to perform building-level (hurricane) loss estimation; i.e., the Inventory-Loss Link.
 
 .. toctree::
    :maxdepth: 1
@@ -20,20 +17,19 @@ Fortuna documentation
    Objective
 
 .. toctree::
-   :caption: Data Fusion module
+   :caption: Inventory_Loss Link module
    :maxdepth: 1
    :numbered: 4
 
    Data_Fusion
-   Details
-   FusionPDf
 
 .. toctree::
-   :caption: Utils module
+   :caption: Module Details
    :maxdepth: 1
    :numbered: 4
 
-   Utils
+   Details
+   Details1
 
 .. toctree::
    :caption: Directory Guide
@@ -41,6 +37,9 @@ Fortuna documentation
    :numbered: 4
 
    Directory
+
+
+
 
 
 
