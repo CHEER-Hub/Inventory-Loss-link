@@ -1,3 +1,0 @@
-.. _my-special-func:
-
-.. autofunction:: Inv_Loss_Link.Inventory_Loss

@@ -1,4 +1,0 @@
-Objective
----------
-
-The objective of the Inventory–CHEER_Safe Link is to integrate the building-level inventory from FORTUNA (https://github.com/CHEER-Hub/Fortuna) with the configuration lookup outputs from CHEER-Safe (https://github.com/CHEER-Hub/LossModel), enabling loss estimation at multiple spatial resolutions, including individual buildings and aggregated zones.
