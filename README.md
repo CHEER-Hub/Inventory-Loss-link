@@ -31,6 +31,10 @@ Make sure the following Python packages are installed:
 - `fiona`
 - `pyproj`
 - `jupyter`
+- `scipy`
+- -`requests`
+- `tqdm`
+
 
 You can install them via:
 
