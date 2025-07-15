@@ -44,7 +44,7 @@ class Inventory_Loss():
 
         # Download the sample file to run the code
         if Download:
-            download_url = "https://www.dropbox.com/scl/fi/ig4nsej4chjdkch26f3jz/CHEER_Safe_data.zip?rlkey=exn7uvelo5ar3qpdcau7n3snb&st=f48kc6md&dl=1"
+            download_url = "https://www.dropbox.com/scl/fi/2asfyl8ms2zf9c06cyf6w/CHEER_Safe_data.zip?rlkey=llgwgd0d3kljb1pnezudbxn3v&st=dnz69jzo&dl=1"
             destination_folder = self.cwd
             os.makedirs(destination_folder, exist_ok=True)
             self.download_and_unzip(download_url, destination_folder)
@@ -593,7 +593,7 @@ class Inventory_Loss():
         Inv=Inv[Inv.geometry.centroid.within(boundary)]
         # Store geometry and value of structure to save sapce
         Inv.index=np.arange(0,len(Inv),1)
-        Inv[['geometry','val_struct_col']].to_parquet(os.path.join(self.cwd+'Intermediate_outputs',cwd_haz+'_'+'Inv_'+cwd_inv+'.parquet'))
+        Inv[['geometry','val_struct_col']].to_parquet(os.path.join(self.cwd,'Intermediate_outputs',cwd_haz+'_'+'Inv_'+cwd_inv+'.parquet'))
         # Instantiate index and an identifier column
         Inv['ID_I']=np.arange(0,len(Inv),1)
         Inv.index=np.arange(0,len(Inv),1)
@@ -715,7 +715,7 @@ class Inventory_Loss():
 
         # Open the sample Inventory to read values
         Inv_dir=os.path.join(self.cwd,'Inv_Updated_Hazard',cwd_haz)
-        Inv=gpd.read_parquet(os.path.join(self.cwd+'Intermediate_outputs',cwd_haz+'_'+'Inv_'+cwd_inv+'.parquet'))
+        Inv=gpd.read_parquet(os.path.join(self.cwd,'Intermediate_outputs',cwd_haz+'_'+'Inv_'+cwd_inv+'.parquet'))
 
         # Build the required directories
         self.mk_dir(os.path.join(self.cwd,'Loss_estimates'))
@@ -745,6 +745,7 @@ class Inventory_Loss():
             else:
                 zone_id='zone_id'
                 zones[zone_id]=np.arange(0,len(zones),1)
+            a=input('aa')
             # Make directory to save
             self.mk_dir(os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,'Zones'))
             self.mk_dir(os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,'Zones',zone))
