@@ -39,7 +39,7 @@ class Inventory_Loss():
     :ivar dict self.flood_depth_to_id: Maps flood depth (in inches) to corresponding IDs per CHEER-Safe design. Details: (https://drive.google.com/file/d/1-WWQ8dlrGdlFFntmMYnycoKeb2VsvSrk/view?usp=drive_link)
     :ivar list[float] self.damage_levels: A list of 50 damage state ratios (from 0% to 140%) representing loss relative to the structure’s nominal value. Details: (https://drive.google.com/file/d/1-WWQ8dlrGdlFFntmMYnycoKeb2VsvSrk/view?usp=drive_link)
     """
-    def __init__(self,cwd:str = './', Download: bool =True) -> None:
+    def __init__(self,cwd:str = '.', Download: bool =True) -> None:
         self.cwd=cwd
 
         # Download the sample file to run the code
