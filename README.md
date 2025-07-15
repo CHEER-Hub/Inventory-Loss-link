@@ -3,7 +3,7 @@
 The **Inventory-Loss Link** module is designed to integrate building inventories and hazard maps with the [CHEER-Safe Loss Estimation Model](https://github.com/CHEER-Hub/LossModel).
 
 Before getting started, please read the documentation:  
-📄 [Data Fusion Documentation](https://cheer-hub.github.io/Inventory-Loss-link/Data_Fusion.html)  
+📄 [Inventory_Loss Link Documentations](https://cheer-hub.github.io/Inventory-Loss-link/Data_Fusion.html)  
 This will help you understand the module and the required data structure to run the model on your dataset.
 
 ---
