@@ -18,8 +18,7 @@ import io
 import os
 from typing import Dict
 from geopandas import GeoDataFrame
-from typing import Dict, Tuple
-from typing import List, Any
+from typing import Dict, Tuple, List, Any, Union
 warnings.filterwarnings('ignore', category=UserWarning)
 warnings.filterwarnings('ignore', category=FutureWarning)
 warnings.simplefilter(action='ignore', category=pd.errors.SettingWithCopyWarning)
@@ -569,6 +568,10 @@ class Inventory_Loss():
         :returns: None. The updated inventory with averaged hazard values is saved to disk. Output location is reported
                 at runtime. See the *Directory* documentation for details.
         :rtype: None
+
+        Notes:
+        - *Important:* For the zone-based analysis, only the structures within the zone boudnaries are retained for the zone-level loss analysis, which are typically less tahn the actual inventory size.
+    
         """
         # Make directories to store the updated inventory with the flood and wind data
         self.mk_dir(os.path.join(self.cwd,'Inv_Updated_Hazard'))
@@ -699,6 +702,10 @@ class Inventory_Loss():
         :param str zone_id: Optional. the name of the column containing unqiue zone_ids, defined by user.
         :returns: None. The method stores loss estimates in output files. See :ref:`dir-section` for details.
         :rtype: None
+
+        Notes:
+        - *Important:* For the zone-based analysis, only the structures within the zone boudnaries are retained for the zone-level loss analysis, which are typically less tahn the actual inventory size.
+        
         """
         Inv_dir=os.path.join(self.cwd,'Inv_Updated_Hazard',cwd_haz)
         L=os.listdir(Inv_dir)
