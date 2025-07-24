@@ -1,0 +1,122 @@
+.. Binv documentation master file, created by
+   sphinx-quickstart on Fri Jun 27 11:21:18 2025.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+.. _Output_tensor:
+
+
+Output Tensor Object
+--------------------
+
+As introduced in section :ref:`Inv_Loss_Link`, the final output of the class is a Python pickle object. The naming convention, as described in :ref:`dir-section`, is as follows:
+
+**I_(Inventory_Y)_H_(Hazard_X)_Z_(zone_z)_I_(interpolation mode).pkl**  
+This pickle object stores the loss estimates for:
+- **Inventory_Y**: the inventory used,
+- **Hazard_X**: the hazard scenarios included,
+- **zone_z**: the zoning system applied (if any),
+- **interpolation mode**: the method of interpolation used (if any).
+
+
+For example, consider the file:  
+`I_NC_Inventory_v1_AI_Imputed_H_TC_Wise_Z_leaphi_zones_20230920_I_linear.pkl`.  
+This pickle file contains multiple fields, as shown in the following image:
+
+.. image:: Tensor.png
+   :alt: Binv framework
+   :align: center
+   :width: 1200px
+
+---
+
+**1. info field**  
+Accessed using `loss['info']`, this field outputs metadata and important details about the loss data. A sample snapshot is shown below:
+
+.. image:: Info.png
+   :alt: Binv framework
+   :align: center
+   :width: 1200px
+
+---
+
+**2. inventory field**  
+This contains the inventory used in the loss estimation, specifically the subset of structures within the hazard zone. All features of the inventory are included in this GeoPandas DataFrame.
+
+Of particular interest are the following columns:
+- **Z**: the assigned Z class,
+- **M**: the assigned M class,
+- **val_struct_col**: the value of each structure,
+- **zone_id**: the zone identifier.
+
+These will be used in conjunction with the loss tensor in later steps.
+
+Regarding the zone system:  
+Since this file uses `"leaphi_zones_20230920"` as its zone system, and the info file notes that the zone ID column is `"i_lh740"`, the `zone_id` column in the inventory 
+assigns a zone ID to each structure based on that. 
+
+**Note:** We decouple zone data from the loss tensor to save space. Later examples will demonstrate how to filter the tensor using this column.
+
+.. image:: Inventory.png
+   :alt: Binv framework
+   :align: center
+   :width: 1200px
+
+---
+
+**3. Hurricane field**  
+This field lists all hazard instances and their indices, which can be used to filter the loss tensor for a specific hazard scenario:
+
+.. image:: Hazard.png
+   :alt: Binv framework
+   :align: center
+   :width: 250px
+
+---
+
+**4. Z_C field**  
+As explained in section :ref:`details`, each building has a distribution over **C** values rather than a single deterministic C. To capture this, the `Z_C` field is a matrix of shape `[Z, C]`, where each row gives the probability distribution of C for a given Z.
+
+For example, to access the probabilities for **C = 1 to 10** when **Z = 3**, use the following (note: Python indexing starts at 0):
+
+.. image:: Z_C.png
+   :alt: Binv framework
+   :align: center
+   :width: 800px
+
+**Note:** Z and C classes start from 1 conceptually, but Python uses 0-based indexing.
+
+---
+
+**5. Loss_estimates field**  
+This is the main loss tensor. The field structure is shown below:
+
+.. image:: Loss_T.png
+   :alt: Binv framework
+   :align: center
+   :width: 800px
+
+---
+
+**Examples**
+
+**EX1: Summing total wind loss (in $) for hazard scenarios 100–200 across the entire inventory**
+
+.. image:: EX1.png
+   :alt: Binv framework
+   :align: center
+   :width: 800px
+
+Note: You can refer to the `"Hurricane"` field in the loss object for all hazard indices.
+
+---
+
+**EX2: Filtering the loss object by `zone_id = 100` and summing total damage (in $)**  
+This assumes a zoning system is present—i.e., the user selected a zoning system during the loss model run. See :ref:`Inventory-Loss`.
+
+.. image:: EX2.png
+   :alt: Binv framework
+   :align: center
+   :width: 800px
+
+We can see that only **451 buildings** fall within this zone (ID = 100 in the Leap-HI 740 zoning system), as shown in the `info` file above.

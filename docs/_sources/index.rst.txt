@@ -46,7 +46,12 @@ Inventory-Loss Link documentation
    Directory
 
 
+.. toctree::
+   :caption: Output Loss Tensor
+   :maxdepth: 1
+   :numbered: 4
 
+   Output_Descriptions
 
 
 

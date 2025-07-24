@@ -32,13 +32,7 @@ Directory Tree
     │               ├── zone_z/            [L-1-1-3-1]
     │                   ├── hazard_x.parquet  [L-1-1-3-1-1]
     ├── User_Output/               [UO]
-        ├── Hazard_X/              [UO-1]
-            ├── Inventory_Y/       [UO-1-1]
-                ├── Loss_DF.csv         [UO-1-1-1]
-                ├── zones/              [UO-1-1-2]
-                    ├── zone_z/         [UO-1-1-2-1]
-                    ├── zone_N.csv      [UO-1-1-2-2]
-                        ├── hazard_x.csv    [UO-1-1-2-1-1]
+        ├── I_(Inventory_Y)_H_(Hazard_X)_Z_(zone_z)_I_(interpolation mode).pkl
 
 Directory Descriptions
 -----------------------
@@ -69,12 +63,6 @@ Directory Descriptions
         - **[L-1-1-3-1] `zone_z/`**: Folder for a specific zone system.
           - **[L-1-1-3-1-1] `hazard_x.parquet`**: Zone-specific losses for each building within `zone_z`.
 
-- **[UO] `User_Output/`**: Final output summaries in `.csv` format for easier user access.
-  - **[UO-1] `Hazard_X/`**: Folder for a specific hazard scenario.
-    - **[UO-1-1] `Inventory_Y/`**: Subfolder for a given inventory.
-      - **[UO-1-1-1] `Loss_DF.csv`**: CSV file of total losses for all buildings.
-      - **[UO-1-1-2] `zones/`**: Folder for zone-level CSV outputs.
-        - **[UO-1-1-2-1] `zone_z/`**: Folder for a specific zone system.
-          - **[UO-1-1-2-1-1] `hazard_x.csv`**: Losses for buildings in `zone_z` under hazard instance `hazard_x`.
-        - **[UO-1-1-2-2] `zone_N.csv`**: Optional summary CSV of zone-level losses.
+- **[UO] `User_Output/`**: Final output summary tensors are stored here.
+  - **[UO_1] `I_(Inventory_Y)_H_(Hazard_X)_Z_(zone_z)_I_(interpolation mode).pkl`**: A python pickle object that stores the loss estimates for Inventory_Y, Hazard_X (hazard instances in it), zone_z (if any; otherwise ''), and with interpolation mode, if any; otherwise ''. Please refer to :ref:`Output_tensor` for more information.
 
