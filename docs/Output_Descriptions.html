@@ -93,16 +93,18 @@
              
   <section id="output-tensor-object">
 <span id="output-tensor"></span><h1><span class="section-number">1. </span>Output Tensor Object<a class="headerlink" href="#output-tensor-object" title="Link to this heading"></a></h1>
-<p>As introduced in section <span class="xref std std-ref">Inv_Loss_Link</span>, the final output of the class is a Python pickle object. The naming convention, as described in <a class="reference internal" href="Directory.html#dir-section"><span class="std std-ref">Directory Structure</span></a>, is as follows:</p>
+<p>As introduced in section <a class="reference internal" href="Data_Fusion.html#class-section"><span class="std std-ref">Inventory-Loss-Link Class</span></a>, the final output of the class is a Python pickle object. The naming convention, as described in <a class="reference internal" href="Directory.html#dir-section"><span class="std std-ref">Directory Structure</span></a>, is as follows:</p>
 <p><strong>I_(Inventory_Y)_H_(Hazard_X)_Z_(zone_z)_I_(interpolation mode).pkl</strong>
-This pickle object stores the loss estimates for:
-- <strong>Inventory_Y</strong>: the inventory used,
-- <strong>Hazard_X</strong>: the hazard scenarios included,
-- <strong>zone_z</strong>: the zoning system applied (if any),
-- <strong>interpolation mode</strong>: the method of interpolation used (if any).</p>
-<p>For example, consider the file:
-<cite>I_NC_Inventory_v1_AI_Imputed_H_TC_Wise_Z_leaphi_zones_20230920_I_linear.pkl</cite>.
-This pickle file contains multiple fields, as shown in the following image:</p>
+This pickle object stores the loss estimates for:</p>
+<ol class="arabic simple">
+<li><p><strong>Inventory_Y</strong>: the inventory used,</p></li>
+<li><p><strong>Hazard_X</strong>: the hazard scenarios included,</p></li>
+<li><p><strong>zone_z</strong>: the zoning system applied (if any),</p></li>
+<li><p><strong>interpolation mode</strong>: the method of interpolation used (if any).</p></li>
+</ol>
+<p>For example, consider the file:</p>
+<p><cite>I_NC_Inventory_v1_AI_Imputed_H_TC_Wise_Z_leaphi_zones_20230920_I_linear.pkl</cite>.</p>
+<p>This pickle file contains multiple fields, as shown in the following image:</p>
 <a class="reference internal image-reference" href="_images/Tensor.png"><img alt="Binv framework" class="align-center" src="_images/Tensor.png" style="width: 1200px;" />
 </a>
 <p>—</p>
@@ -113,16 +115,17 @@ Accessed using <cite>loss[‘info’]</cite>, this field outputs metadata and im
 <p>—</p>
 <p><strong>2. inventory field</strong>
 This contains the inventory used in the loss estimation, specifically the subset of structures within the hazard zone. All features of the inventory are included in this GeoPandas DataFrame.</p>
-<p>Of particular interest are the following columns:
+<p>Of particular interest are the following columns which allows the user to filter the loss tensor:
 - <strong>Z</strong>: the assigned Z class,
 - <strong>M</strong>: the assigned M class,
 - <strong>val_struct_col</strong>: the value of each structure,
 - <strong>zone_id</strong>: the zone identifier.</p>
-<p>These will be used in conjunction with the loss tensor in later steps.</p>
-<p>Regarding the zone system:
-Since this file uses <cite>“leaphi_zones_20230920”</cite> as its zone system, and the info file notes that the zone ID column is <cite>“i_lh740”</cite>, the <cite>zone_id</cite> column in the inventory
-assigns a zone ID to each structure based on that.</p>
-<p><strong>Note:</strong> We decouple zone data from the loss tensor to save space. Later examples will demonstrate how to filter the tensor using this column.</p>
+<p>Regarding the zone system:</p>
+<p>The zone system, as outlined in <span class="xref std std-ref">Inventory-Loss</span> section, are defined by user and provided as a file to the loss class. So, for the example we have here,
+the loss is based on user-defined zone system of “leaphi_zones_20230920”, with the zone-id defined as <cite>“i_lh740”</cite> by the user. Each structure in the inventory is thus
+matched with the zone-ids, if any, otherwise set as -1.</p>
+<p><strong>Note:</strong> Later examples will demonstrate how to filter the tensor using this column.</p>
+<p><strong>Note:</strong> We chose this system to decouple zone from the loss tensor by including it inside the inventory data to save space.</p>
 <a class="reference internal image-reference" href="_images/Inventory.png"><img alt="Binv framework" class="align-center" src="_images/Inventory.png" style="width: 1200px;" />
 </a>
 <p>—</p>
@@ -149,8 +152,8 @@ This is the main loss tensor. The field structure is shown below:</p>
 </a>
 <p>Note: You can refer to the <cite>“Hurricane”</cite> field in the loss object for all hazard indices.</p>
 <p>—</p>
-<p><strong>EX2: Filtering the loss object by `zone_id = 100` and summing total damage (in $)</strong>
-This assumes a zoning system is present—i.e., the user selected a zoning system during the loss model run. See <span class="xref std std-ref">Inventory-Loss</span>.</p>
+<p><strong>EX2: Filtering the loss object by `zone_id = 100` and keep the total damage (in $) column</strong>
+This assumes a zoning system is present—i.e., the user selected a zoning system during the loss model run. See <a class="reference internal" href="Data_Fusion.html#class-section"><span class="std std-ref">Inventory-Loss-Link Class</span></a>.</p>
 <a class="reference internal image-reference" href="_images/EX2.png"><img alt="Binv framework" class="align-center" src="_images/EX2.png" style="width: 800px;" />
 </a>
 <p>We can see that only <strong>451 buildings</strong> fall within this zone (ID = 100 in the Leap-HI 740 zoning system), as shown in the <cite>info</cite> file above.</p>
