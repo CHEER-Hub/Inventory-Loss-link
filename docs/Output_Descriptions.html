@@ -108,13 +108,13 @@ This pickle object stores the loss estimates for:</p>
 <a class="reference internal image-reference" href="_images/Tensor.png"><img alt="Binv framework" class="align-center" src="_images/Tensor.png" style="width: 1200px;" />
 </a>
 <p>—</p>
-<p><strong>1. info field</strong>
-Accessed using <cite>loss[‘info’]</cite>, this field outputs metadata and important details about the loss data. A sample snapshot is shown below:</p>
+<p><strong>1. info field</strong></p>
+<p>Accessed using <cite>loss[‘info’]</cite>, this field outputs metadata and important details about the loss data. A sample snapshot is shown below:</p>
 <a class="reference internal image-reference" href="_images/Info.png"><img alt="Binv framework" class="align-center" src="_images/Info.png" style="width: 1200px;" />
 </a>
 <p>—</p>
-<p><strong>2. inventory field</strong>
-This contains the inventory used in the loss estimation, specifically the subset of structures within the hazard zone. All features of the inventory are included in this GeoPandas DataFrame.</p>
+<p><strong>2. inventory field</strong></p>
+<p>This contains the inventory used in the loss estimation, specifically the subset of structures within the hazard zone. All features of the inventory are included in this GeoPandas DataFrame.</p>
 <p>Of particular interest are the following columns which allows the user to filter the loss tensor:
 - <strong>Z</strong>: the assigned Z class,
 - <strong>M</strong>: the assigned M class,
@@ -129,20 +129,20 @@ matched with the zone-ids, if any, otherwise set as -1.</p>
 <a class="reference internal image-reference" href="_images/Inventory.png"><img alt="Binv framework" class="align-center" src="_images/Inventory.png" style="width: 1200px;" />
 </a>
 <p>—</p>
-<p><strong>3. Hurricane field</strong>
-This field lists all hazard instances and their indices, which can be used to filter the loss tensor for a specific hazard scenario:</p>
+<p><strong>3. Hurricane field</strong></p>
+<p>This field lists all hazard instances and their indices, which can be used to filter the loss tensor for a specific hazard scenario:</p>
 <a class="reference internal image-reference" href="_images/Hazard.png"><img alt="Binv framework" class="align-center" src="_images/Hazard.png" style="width: 250px;" />
 </a>
 <p>—</p>
-<p><strong>4. Z_C field</strong>
-As explained in section <span class="xref std std-ref">details</span>, each building has a distribution over <strong>C</strong> values rather than a single deterministic C. To capture this, the <cite>Z_C</cite> field is a matrix of shape <cite>[Z, C]</cite>, where each row gives the probability distribution of C for a given Z.</p>
+<p><strong>4. Z_C field</strong></p>
+<p>As explained in section <span class="xref std std-ref">details</span>, each building has a distribution over <strong>C</strong> values rather than a single deterministic C. To capture this, the <cite>Z_C</cite> field is a matrix of shape <cite>[Z, C]</cite>, where each row gives the probability distribution of C for a given Z.</p>
 <p>For example, to access the probabilities for <strong>C = 1 to 10</strong> when <strong>Z = 3</strong>, use the following (note: Python indexing starts at 0):</p>
 <a class="reference internal image-reference" href="_images/Z_C.png"><img alt="Binv framework" class="align-center" src="_images/Z_C.png" style="width: 800px;" />
 </a>
 <p><strong>Note:</strong> Z and C classes start from 1 conceptually, but Python uses 0-based indexing.</p>
 <p>—</p>
-<p><strong>5. Loss_estimates field</strong>
-This is the main loss tensor. The field structure is shown below:</p>
+<p><strong>5. Loss_estimates field</strong></p>
+<p>This is the main loss tensor. The field structure is shown below:</p>
 <a class="reference internal image-reference" href="_images/Loss_T.png"><img alt="Binv framework" class="align-center" src="_images/Loss_T.png" style="width: 800px;" />
 </a>
 <p>—</p>
