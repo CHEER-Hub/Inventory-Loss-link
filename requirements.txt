@@ -1,9 +1,0 @@
-pandas
-numpy
-geopandas
-shapely
-scipy
-tqdm
-requests
-pyproj
-fiona
