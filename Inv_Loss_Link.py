@@ -215,7 +215,7 @@ class Inventory_Loss():
         return expanded 
 
 
-    def Define_new_table(self, cwd_look: Dict[Tuple[int, int], Dict[Tuple[float, float], list]]) -> None:
+    def Define_new_table(self, cwd_look: str) -> None:
         """
         Transforms a CHEER-Safe lookup table of the form `Dict[(M, C)][(Wind, Flood)] -> Damage Ratios`
         into a new representation using a derived variable `Z = f(M, C)`, resulting in 
@@ -227,7 +227,7 @@ class Inventory_Loss():
                         that maps (Wind, Flood) values to a list of 50 damage ratios.
                         For reference, see:
                         `<https://drive.google.com/file/d/1-WWQ8dlrGdlFFntmMYnycoKeb2VsvSrk/view?usp=drive_link>_`.
-        :type cwd_look: Dict[Tuple[int, int], Dict[Tuple[float, float], list]]
+        :type cwd_look: str
         
         :returns: None. The method stores the resulting `Dict[Z][(Wind, Flood)]` at a predefined location.
         :rtype: None
@@ -352,9 +352,13 @@ class Inventory_Loss():
         part6 = C_values[:, 4, combs[:, 5]]
 
         # This return the probability of each C value for a given M value 
-        K1_array = part1 * part2 * part3 * part4 * part5 * part6  
-        K1 = K1_array.tolist()
+        K1_array = part1 * part2 * part3 * part4 * part5 * part6 
 
+        # Store the Z/C-probability for later usages
+        with open(os.path.join(self.cwd,'Intermediate_outputs','Z_C.pkl'), 'wb') as f:
+            pickle.dump(K1_array,f)
+        print('C values corresponding to Z numbers are stored at: \t'+os.path.join(self.cwd,'Intermediate_outputs','Z_C.pkl'))
+        
         # Check if the sum adds up yo 1
         final_sum = K1_array[-1].sum()
         print("Probabilities summation (should be one; small numerical errors are fine):",final_sum)
@@ -408,7 +412,6 @@ class Inventory_Loss():
         print('New look-up table (configuration (Z) -> global loss ratio) is created at:\t'+os.path.join(self.cwd,'Intermediate_outputs','Z_transform1.pkl'))
 
 
-    from typing import List, Union
     def Inv_Z_Transformation(
         self,
         cwd_inv: str,
@@ -596,7 +599,8 @@ class Inventory_Loss():
         Inv=Inv[Inv.geometry.centroid.within(boundary)]
         # Store geometry and value of structure to save sapce
         Inv.index=np.arange(0,len(Inv),1)
-        Inv[['geometry','val_struct_col']].to_parquet(os.path.join(self.cwd,'Intermediate_outputs',cwd_haz+'_'+'Inv_'+cwd_inv+'.parquet'))
+        if Mode!='Test':
+            Inv.to_parquet(os.path.join(self.cwd,'Intermediate_outputs',cwd_haz+'_'+'Inv_'+cwd_inv+'.parquet'))
         # Instantiate index and an identifier column
         Inv['ID_I']=np.arange(0,len(Inv),1)
         Inv.index=np.arange(0,len(Inv),1)
@@ -687,8 +691,33 @@ class Inventory_Loss():
 
 
 
+    def linear_interpolation(self,m:Dict[Union[float, Tuple[int, int]], float], x: float, y: float, z: int):
+        """
+        Bilinear (linear if one variable is integer) interpolation for look_up(x, y), using integer grid points.
 
-    def Loss_estimate(self, cwd_haz: str, cwd_inv: str, zone: str = '', zone_id: str = '') -> None:
+        :param Dict[Union[float, Tuple[int, int]], float] m: m[z][x,y] is a lookup dictionary that returns (here loss ratio) given the wind speed ID, x and flodd depth, y, truncated as integers
+        :param float x: float Wind speed ID
+        :param float y: float Flood Depyh ID
+        : param int z: the parameter to read dictionary m for a given structural configuration.
+        Returns:
+            float : interpolated value at (x, y)
+        """
+
+        # Evaluate function at 4 surrounding points
+        f00 = m[z][(int(x),int(y))]
+        f10 = m[z][(int(x+1),int(y))]
+        f01 = m[z][int(x),int(y+1)]
+        f11 = m[z][(int(x+1),int(y+1))]
+
+        # Bilinear interpolation formula
+        return (
+            f00 * (1-(x-int(x))) * (1-(y-int(y))) +
+            f10 * (x-int(x)) * (1-(y - int(y))) +
+            f01 * (1-(x-int(x))) * (y - int(y)) +
+            f11 * (x - int(x)) * (y - int(y))
+        ) / (1) # Since lookup table is grided at 1 intervals
+
+    def Loss_estimate(self, cwd_haz: str, cwd_inv: str, interpolation_mode: str='linear',zone: str = '', zone_id: str = '') -> None:
         """
         Estimates loss values (in million dollars) at various spatial levels based on a given inventory and hazard scenario.
         This function relies on prior computations (e.g., hazard-to-building mapping, configuration lookup, etc.)
@@ -697,6 +726,7 @@ class Inventory_Loss():
                             for correct placement and naming conventions.
         :param str cwd_haz: The name of the hazard folder containing one or more hazard files. Refer to the *Directory*
                             documentation for placement requirements.
+        :param str interpolation_mode: The chosen interpolation mode for Wind and Flood IDs, currently set as linear as the only available mode.
         :param str zone: Optional. Name of a `.shp` or `.parquet` file defining zone boundaries of interest.
                         If provided, losses are aggregated at the zone level.
         :param str zone_id: Optional. the name of the column containing unqiue zone_ids, defined by user.
@@ -729,38 +759,17 @@ class Inventory_Loss():
         self.mk_dir(os.path.join(self.cwd,'Loss_estimates',cwd_haz))
         self.mk_dir(os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv))
 
-        # Build the for user-friendly .csv files
-        self.mk_dir(os.path.join(self.cwd,'User_Output'))
-        self.mk_dir(os.path.join(self.cwd,'User_Output',cwd_haz))
-        self.mk_dir(os.path.join(self.cwd,'User_Output',cwd_haz,cwd_inv))
+        # Check if the chosen interpolation mode exists
+        try:
+            inter = getattr(self, f"{interpolation_mode}_interpolation")
+            print("The chosen interpolation mode is in work!")
+        except AttributeError:
+            print("The chosen interpolation mode does not exist. Please refer to the documentation at: https://cheer-hub.github.io/Inventory-Loss-link/")
+            print("Proceeding without Wind and Flood ID interpolation")
+            interpolation_mode = ''
+            inter = None  # or a fallback function
 
-        # If zone level is requested
-        if len(zone)>0:
-            try:
-                try:
-                    zones=gpd.read_parquet(os.path.join(self.cwd,'zones',zone+'.parquet'))
-                    zone_computation=True
-                except:
-                    zones=gpd.read_file(os.path.join(self.cwd,'zones',zone+'.shp'))
-                    zone_computation=True
-            except:
-                print('The chosen zone does not exist')
-                zone_computation=False
-        if zone_computation:
-            if len(zone_id)>0:
-                pass
-            else:
-                zone_id='zone_id'
-                zones[zone_id]=np.arange(0,len(zones),1)
-
-            # Make directory to save
-            self.mk_dir(os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,'Zones'))
-            self.mk_dir(os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,'Zones',zone))
-
-            # For user firendly files
-            self.mk_dir(os.path.join(self.cwd,'User_Output',cwd_haz,cwd_inv,'Zones'))
-            self.mk_dir(os.path.join(self.cwd,'User_Output',cwd_haz,cwd_inv,'Zones',zone))
-
+        # Check to save the overlapping inventory for only once
         for l in tqdm(L,desc='Hazard instances:'):
             #Hazard instance name
             haz_n=l.replace('Inv_','').replace('.parquet','')
@@ -774,41 +783,115 @@ class Inventory_Loss():
             W_F.set_crs(Inv.crs, inplace=True)
 
             # Employ the Z-based lookup table to read global damage state (01-140% damage).
-            W_F['Damage_ratio']=W_F[['Wind_Tr','Flood_Tr','Z']].apply(lambda x: dic[x['Z']][int(x['Wind_Tr']-1),int(x['Flood_Tr']-1)],axis=1)
-            W_F['Loss(M)']=W_F['Damage_ratio']*W_F['val_struct_col']/1000000
-            Name.append((l.replace('.parquet','')).replace('Inv_',''))
-            DT.append(np.sum(W_F['Loss(M)']))
+            if interpolation_mode:
+                W_F['Damage_ratio']=W_F[['Wind_Tr','Flood_Tr','Z']].apply(lambda x: inter(dic,x['Wind_Tr']-1,x['Flood_Tr']-1,x['Z']),axis=1)
+                # By wind and Flood separately
+                W_F['Damage_ratio_W']=W_F[['Wind_Tr','Flood_Tr','Z']].apply(lambda x: inter(dic,x['Wind_Tr']-1,0,x['Z']),axis=1)
+                W_F['Damage_ratio_F']=W_F[['Wind_Tr','Flood_Tr','Z']].apply(lambda x: inter(dic,0,x['Flood_Tr']-1,x['Z']),axis=1)
+                # Save the estimated damage ratios 
+                W_F[['Damage_ratio','Damage_ratio_W','Damage_ratio_F']].to_parquet(os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,haz_n+'_interpolation_'+interpolation_mode+'.parquet'))
 
-            W_F[['Damage_ratio','Loss(M)']].to_parquet(os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,haz_n+'.parquet'))
+            else:
+                W_F['Damage_ratio']=W_F[['Wind_Tr','Flood_Tr','Z']].apply(lambda x: dic[x['Z']][int(np.round(x['Wind_Tr']-1)),int(np.round(x['Flood_Tr']-1))],axis=1)
+                # By wind and Flood separately
+                W_F['Damage_ratio_W']=W_F[['Wind_Tr','Flood_Tr','Z']].apply(lambda x: dic[x['Z']][int(np.round(x['Wind_Tr']-1)),int(0)],axis=1)
+                W_F['Damage_ratio_F']=W_F[['Wind_Tr','Flood_Tr','Z']].apply(lambda x: dic[x['Z']][int(0),int(np.round(x['Flood_Tr']-1))],axis=1)
+                # Save the estimated damage ratios 
+                W_F[['Damage_ratio','Damage_ratio_W','Damage_ratio_F']].to_parquet(os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,haz_n+'.parquet'))
 
-            if zone_computation:
-                zone_copy=zones.copy()
-                zone_copy.to_crs("EPSG:4326", inplace=True)
+    def Loss_Tensor(self,cwd_haz: str, cwd_inv:str,zone: str='',zone_id: str='',interpolation_mode: str=''):
+        """
+        Estimates loss values (in million dollars) at various spatial levels based on a given inventory and hazard scenario.
+        This function relies on prior computations (e.g., hazard-to-building mapping, configuration lookup, etc.)
 
-                # Spatial join: assign each point in Inv to a zone
-                W_F_centroids = gpd.GeoDataFrame(W_F, geometry='geometry',crs=Inv.crs)
-                W_F_centroids['geometry'] = W_F_centroids.centroid
-                crs=zone_copy.crs
-                W_F_centroids=W_F_centroids.set_crs(crs)
-                #match and count the number of strcutures in each zone and loss per zone
-                joined=W_F_centroids.sjoin(zone_copy)
-                joint=joined.groupby(zone_id)['Loss(M)'].sum()
-                dict_zone_loss=dict(zip(joint.index,joined.groupby(zone_id)['Loss(M)'].sum()))
-                joint=joined.groupby(zone_id)[zone_id].count()
-                dict_zone_N=dict(zip(joint.index,joint))
-                zone_copy['Loss(M)']=zone_copy[zone_id].map(dict_zone_loss).fillna(0)
-                zone_copy['N']=zone_copy[zone_id].map(dict_zone_N).fillna(0)
-                
-                zone_copy.to_parquet(os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,'Zones',zone,l))
-                zone_copy[[zone_id,'Loss(M)']].to_csv(os.path.join(self.cwd,'User_Output',cwd_haz,cwd_inv,'Zones',zone,haz_n+'.csv'))
-        Loss_df=pd.DataFrame({'Hazard':Name,'Loss (M)':DT})
-        Loss_df.to_parquet(os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,'Loss_DF.parquet'))
+        :param str cwd_inv: The name of the inventory file (without extension). Refer to the *Directory* documentation
+                            for correct placement and naming conventions.
+        :param str cwd_haz: The name of the hazard folder containing one or more hazard files. Refer to the *Directory*
+                            documentation for placement requirements.
+        :param str interpolation_mode: The chosen interpolation mode for Wind and Flood IDs, currently set as linear as the only available mode.
+        :param str zone: Optional. Name of a `.shp` or `.parquet` file defining zone boundaries of interest.
+                        If provided, losses are aggregated at the zone level.
+        :param str zone_id: Optional. the name of the column containing unqiue zone_ids, defined by user.
+        :returns: None. The method stores loss estimates in output files. See :ref:`dir-section` for details.
+        :rtype: None
 
-        #Also save it as .csv, for users
-        Info=pd.DataFrame({'Hazard':['Total Buildings:'],'Loss (M)':len(W_F)})
-        pd.concat((Loss_df,Info)).to_csv(os.path.join(self.cwd,'User_Output',cwd_haz,cwd_inv,'Loss_DF.csv'))
-        print('Inventory-level are stored at:\t',os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv))
+        Notes:
+        - *Important:* For the zone-based analysis, only the structures within the zone boudnaries are retained for the zone-level loss analysis, which are typically less tahn the actual inventory size.
+        
+        """
+        # Read the Inventory
+        Inv_dir=os.path.join(self.cwd,'Inv_Updated_Hazard',cwd_haz)
 
-        #Sort zones files, if any for users as csv
+        # Read the Hazard instances in the designated hazard folder
+        L=os.listdir(Inv_dir)
+        Inv=gpd.read_parquet(os.path.join(self.cwd,'Intermediate_outputs',cwd_haz+'_'+'Inv_'+cwd_inv+'.parquet'))
+
+        # Based on the inventory and hazard size, build the loss matrix and force to float32 precision to save space
+        D=np.zeros((len(L),len(Inv),6)).astype(np.float32)
+        zet=0
+
+        # A list to record hurricane names being read
+        Name=[]
+
+
+        # Check if the chosen interpolation mode exists
+        try:
+            inter_mode='inter=self.%s_interpolation'%(interpolation_mode)
+            exec(inter_mode)
+            print('The chosen interpolation mode is in work!')
+        except:
+            print('The chosen interpolation mode does not exists, please refer to the documentation at: https://cheer-hub.github.io/Inventory-Loss-link/')
+            print('Proceeding without Wind and Flood ID interpolation')
+            interpolation_mode='' 
+
+        # Read C probabilities per Z
+        with open(os.path.join(self.cwd,'Intermediate_outputs','Z_C.pkl'), 'rb') as f:
+            C_array=pickle.load(f)
+
+
+
+        # Assign zone-id to inventory records, if any
+        if len(zone)>0:
+            try:
+                try:
+                    zones=gpd.read_parquet(os.path.join(self.cwd,'zones',zone+'.parquet'))
+                    zone_computation=True
+                except:
+                    zones=gpd.read_file(os.path.join(self.cwd,'zones',zone+'.shp'))
+                    zone_computation=True
+            except:
+                print('The chosen zone does not exist')
+                zone_computation=False
+
+        # If a valid zone system is given and its ID column defined as zone_id, add 
+        # zone ID to each intersecting buidling (centroid) item to keep
+        # the record of zone-based losses   
         if zone_computation:
-            print('zone-level are stored at:\t',os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,'Zones',zone))
+            Inv_copy=Inv.copy()
+            Inv_copy.geometry=Inv.geometry.centroid 
+            zones=zones.to_crs(Inv_copy.crs)
+            joined=Inv_copy.sjoin(zones) 
+            dict_zone_N=dict(zip(joined.index,joined[zone_id]))
+            Inv['zone_id']=Inv.index.map(dict_zone_N).fillna(-1)
+        else:
+            Inv['zone_id']=-1
+
+        # Build the loss atrix chunk for each hazard instances and then put them into the loss tensor
+        for l in tqdm(L,desc='Hazard instances:'):
+            haz_n=l.replace('Inv_','').replace('.parquet','')
+            if interpolation_mode:
+                W_F=pd.read_parquet(os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,haz_n+'_interpolation_'+interpolation_mode+'.parquet'))
+            else:
+                W_F=pd.read_parquet(os.path.join(self.cwd,'Loss_estimates',cwd_haz,cwd_inv,haz_n+'.parquet'))
+            D[zet,:,:]=np.concatenate((np.array(W_F[['Damage_ratio','Damage_ratio_F','Damage_ratio_W']]),np.array(W_F[['Damage_ratio','Damage_ratio_F','Damage_ratio_W']])*(np.array(Inv['val_struct_col']).reshape((len(Inv),1)))),axis=1).astype(np.float32)
+            zet+=1
+            Name.append(haz_n)
+
+        # Build the info file 
+        Text="Inventory:\t%s\nHazard Scenario:\t%s\nNumber of hazard instances:\t%s\nNumber of buildings inside the hazard zone:\t%s\nAny zone system?:\t%s\nZone ID columns:\t%s\n"%(cwd_inv,cwd_haz,str(len(L)),str(len(Inv)),str(zone),zone_id)
+        loss={'info':Text,'Inventory':Inv,'Hurricane':pd.DataFrame({'name':Name}),'Z_C':C_array,'Loss_estimates':D}
+        # Store the Loss Object, please refer to the documentation at: https://cheer-hub.github.io/Inventory-Loss-link/'
+        with open(os.path.join(self.cwd,'User_Output','I_'+cwd_inv+'_H_'+cwd_haz+'_Z_'+zone+'_I_'+interpolation_mode+'.pkl'), 'wb') as f:
+            pickle.dump(loss,f)
+
+        print('Loss tensor is stored at:\t',os.path.join(self.cwd,'User_Output','I_'+cwd_inv+'_H_'+cwd_haz+'_Z_'+zone+'_I_'+interpolation_mode+'.pkl'))
