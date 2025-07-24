@@ -19,6 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Output Tensor Object" href="Output_Descriptions.html" />
     <link rel="prev" title="2. Hazard_Inv_map Details" href="Details1.html" /> 
 </head>
 
@@ -65,6 +66,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#directory-descriptions">1.2. Directory Descriptions</a></li>
 </ul>
 </li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Output Loss Tensor</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Output_Descriptions.html">1. Output Tensor Object</a></li>
 </ul>
 
         </div>
@@ -117,13 +122,7 @@
 │               ├── zone_z/            [L-1-1-3-1]
 │                   ├── hazard_x.parquet  [L-1-1-3-1-1]
 ├── User_Output/               [UO]
-    ├── Hazard_X/              [UO-1]
-        ├── Inventory_Y/       [UO-1-1]
-            ├── Loss_DF.csv         [UO-1-1-1]
-            ├── zones/              [UO-1-1-2]
-                ├── zone_z/         [UO-1-1-2-1]
-                ├── zone_N.csv      [UO-1-1-2-2]
-                    ├── hazard_x.csv    [UO-1-1-2-1-1]
+    ├── I_(Inventory_Y)_H_(Hazard_X)_Z_(zone_z)_I_(interpolation mode).pkl
 </pre></div>
 </div>
 </section>
@@ -164,24 +163,8 @@
 </ul>
 </div></blockquote>
 </li>
-<li><p><strong>[UO] `User_Output/`</strong>: Final output summaries in <cite>.csv</cite> format for easier user access.
-- <strong>[UO-1] `Hazard_X/`</strong>: Folder for a specific hazard scenario.</p>
-<blockquote>
-<div><ul>
-<li><p><strong>[UO-1-1] `Inventory_Y/`</strong>: Subfolder for a given inventory.
-- <strong>[UO-1-1-1] `Loss_DF.csv`</strong>: CSV file of total losses for all buildings.
-- <strong>[UO-1-1-2] `zones/`</strong>: Folder for zone-level CSV outputs.</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><strong>[UO-1-1-2-1] `zone_z/`</strong>: Folder for a specific zone system.
-- <strong>[UO-1-1-2-1-1] `hazard_x.csv`</strong>: Losses for buildings in <cite>zone_z</cite> under hazard instance <cite>hazard_x</cite>.</p></li>
-<li><p><strong>[UO-1-1-2-2] `zone_N.csv`</strong>: Optional summary CSV of zone-level losses.</p></li>
-</ul>
-</div></blockquote>
-</li>
-</ul>
-</div></blockquote>
-</li>
+<li><p><strong>[UO] `User_Output/`</strong>: Final output summary tensors are stored here.
+- <strong>[UO_1] `I_(Inventory_Y)_H_(Hazard_X)_Z_(zone_z)_I_(interpolation mode).pkl`</strong>: A python pickle object that stores the loss estimates for Inventory_Y, Hazard_X (hazard instances in it), zone_z (if any; otherwise ‘’), and with interpolation mode, if any; otherwise ‘’. Please refer to <a class="reference internal" href="Output_Descriptions.html#output-tensor"><span class="std std-ref">Output Tensor Object</span></a> for more information.</p></li>
 </ul>
 </section>
 </section>
@@ -191,6 +174,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="Details1.html" class="btn btn-neutral float-left" title="2. Hazard_Inv_map Details" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Output_Descriptions.html" class="btn btn-neutral float-right" title="1. Output Tensor Object" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -57,7 +57,9 @@
 <li class="toctree-l3"><a class="reference internal" href="#Inv_Loss_Link.Inventory_Loss.Define_new_table"><code class="docutils literal notranslate"><span class="pre">Inventory_Loss.Define_new_table()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Inv_Loss_Link.Inventory_Loss.Inv_Z_Transformation"><code class="docutils literal notranslate"><span class="pre">Inventory_Loss.Inv_Z_Transformation()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Inv_Loss_Link.Inventory_Loss.Hazard_Inv_map"><code class="docutils literal notranslate"><span class="pre">Inventory_Loss.Hazard_Inv_map()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Inv_Loss_Link.Inventory_Loss.linear_interpolation"><code class="docutils literal notranslate"><span class="pre">Inventory_Loss.linear_interpolation()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Inv_Loss_Link.Inventory_Loss.Loss_estimate"><code class="docutils literal notranslate"><span class="pre">Inventory_Loss.Loss_estimate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Inv_Loss_Link.Inventory_Loss.Loss_Tensor"><code class="docutils literal notranslate"><span class="pre">Inventory_Loss.Loss_Tensor()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -75,6 +77,10 @@
 <p class="caption" role="heading"><span class="caption-text">Directory Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Directory.html">1. Directory Structure</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Output Loss Tensor</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Output_Descriptions.html">1. Output Tensor Object</a></li>
 </ul>
 
         </div>
@@ -106,7 +112,7 @@
 <p>A sample Jupyter notebook is availabe at the GitHub repo (<a class="reference external" href="https://github.com/CHEER-Hub/Inventory-Loss-link/">https://github.com/CHEER-Hub/Inventory-Loss-link/</a>) to run this class with the sample data.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="Inv_Loss_Link.Inventory_Loss">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Inv_Loss_Link.</span></span><span class="sig-name descname"><span class="pre">Inventory_Loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cwd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'./'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Download</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Inv_Loss_Link.Inventory_Loss" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Inv_Loss_Link.</span></span><span class="sig-name descname"><span class="pre">Inventory_Loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cwd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Download</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Inv_Loss_Link.Inventory_Loss" title="Link to this definition"></a></dt>
 <dd><p>A class to compute loss based on a given building inventory and the loss configurations provided by the CHEER-Safe model. Various implementations are saved within this class upon invocation, as described below.</p>
 <p>Initialization of the <cite>Inventory_Loss</cite> object involves:</p>
 <dl class="field-list simple">
@@ -201,14 +207,14 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Inv_Loss_Link.Inventory_Loss.Define_new_table">
-<span class="sig-name descname"><span class="pre">Define_new_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cwd_look</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#Inv_Loss_Link.Inventory_Loss.Define_new_table" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">Define_new_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cwd_look</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#Inv_Loss_Link.Inventory_Loss.Define_new_table" title="Link to this definition"></a></dt>
 <dd><p>Transforms a CHEER-Safe lookup table of the form <cite>Dict[(M, C)][(Wind, Flood)] -&gt; Damage Ratios</cite>
 into a new representation using a derived variable <cite>Z = f(M, C)</cite>, resulting in
 <cite>Dict[Z][(Wind, Flood)] -&gt; Global damage ratio</cite>.</p>
 <p>More details are available in the documentation at: <a class="reference internal" href="Details.html#zt-section"><span class="std std-ref">Define_new_table Details</span></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>cwd_look</strong> (<em>Dict</em><em>[</em><em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em><em>, </em><em>Dict</em><em>[</em><em>Tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em><em>, </em><em>list</em><em>]</em><em>]</em>) – The CHEER-Safe-generated lookup table. It maps each (M, C) pair to a sub-dictionary
+<dd class="field-odd"><p><strong>cwd_look</strong> (<em>str</em>) – The CHEER-Safe-generated lookup table. It maps each (M, C) pair to a sub-dictionary
 that maps (Wind, Flood) values to a list of 50 damage ratios.
 For reference, see:
 <cite>&lt;https://drive.google.com/file/d/1-WWQ8dlrGdlFFntmMYnycoKeb2VsvSrk/view?usp=drive_link&gt;_</cite>.</p>
@@ -284,22 +290,39 @@ at runtime. See the <em>Directory</em> documentation for details.</p>
 <dd class="field-odd"><p>None</p>
 </dd>
 </dl>
-<p>Notes:
-- <em>Important:</em> For the zone-based analysis, only the structures within the zone boudnaries are retained for the zone-level loss analysis, which are typically less tahn the actual inventory size.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Inv_Loss_Link.Inventory_Loss.linear_interpolation">
+<span class="sig-name descname"><span class="pre">linear_interpolation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Inv_Loss_Link.Inventory_Loss.linear_interpolation" title="Link to this definition"></a></dt>
+<dd><p>Bilinear (linear if one variable is integer) interpolation for look_up(x, y), using integer grid points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m</strong> (<em>Dict</em><em>[</em><em>Union</em><em>[</em><em>float</em><em>, </em><em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em><em>]</em><em>, </em><em>float</em><em>]</em>) – m[z][x,y] is a lookup dictionary that returns (here loss ratio) given the wind speed ID, x and flodd depth, y, truncated as integers</p></li>
+<li><p><strong>x</strong> (<em>float</em>) – float Wind speed ID</p></li>
+<li><p><strong>y</strong> (<em>float</em>) – float Flood Depyh ID</p></li>
+</ul>
+</dd>
+</dl>
+<p>: param int z: the parameter to read dictionary m for a given structural configuration.
+:returns: interpolated value at (x, y)
+:rtype: float</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Inv_Loss_Link.Inventory_Loss.Loss_estimate">
-<span class="sig-name descname"><span class="pre">Loss_estimate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cwd_haz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cwd_inv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#Inv_Loss_Link.Inventory_Loss.Loss_estimate" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">Loss_estimate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cwd_haz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cwd_inv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#Inv_Loss_Link.Inventory_Loss.Loss_estimate" title="Link to this definition"></a></dt>
 <dd><p>Estimates loss values (in million dollars) at various spatial levels based on a given inventory and hazard scenario.
 This function relies on prior computations (e.g., hazard-to-building mapping, configuration lookup, etc.)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cwd_inv</strong> (<em>str</em>) – The name of the inventory file (without extension). Refer to the <em>Directory</em> documentation
-for correct placement and naming conventions.</p></li>
 <li><p><strong>cwd_haz</strong> (<em>str</em>) – The name of the hazard folder containing one or more hazard files. Refer to the <em>Directory</em>
 documentation for placement requirements.</p></li>
+<li><p><strong>cwd_inv</strong> (<em>str</em>) – The name of the inventory file (without extension). Refer to the <em>Directory</em> documentation
+for correct placement and naming conventions.</p></li>
+<li><p><strong>interpolation_mode</strong> (<em>str</em>) – The chosen interpolation mode to account for float flood and wind ID’s when reading the look-up tables.</p></li>
 <li><p><strong>zone</strong> (<em>str</em>) – Optional. Name of a <cite>.shp</cite> or <cite>.parquet</cite> file defining zone boundaries of interest.
 If provided, losses are aggregated at the zone level.</p></li>
 <li><p><strong>zone_id</strong> (<em>str</em>) – Optional. the name of the column containing unqiue zone_ids, defined by user.</p></li>
@@ -307,6 +330,33 @@ If provided, losses are aggregated at the zone level.</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>None. The method stores loss estimates in output files. See <a class="reference internal" href="Directory.html#dir-section"><span class="std std-ref">Directory Structure</span></a> for details.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Inv_Loss_Link.Inventory_Loss.Loss_Tensor">
+<span class="sig-name descname"><span class="pre">Loss_Tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cwd_haz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cwd_inv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Inv_Loss_Link.Inventory_Loss.Loss_Tensor" title="Link to this definition"></a></dt>
+<dd><p>Estimates loss values (in million dollars) at various spatial levels based on a given inventory and hazard scenario.
+This function relies on prior computations (e.g., hazard-to-building mapping, configuration lookup, etc.)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cwd_haz</strong> (<em>str</em>) – The name of the hazard folder containing one or more hazard files. Refer to the <em>Directory</em>
+documentation for placement requirements.</p></li>
+<li><p><strong>cwd_inv</strong> (<em>str</em>) – The name of the inventory file (without extension). Refer to the <em>Directory</em> documentation
+for correct placement and naming conventions.</p></li>
+<li><p><strong>interpolation_mode</strong> (<em>str</em>) – The chosen interpolation mode to account for float flood and wind ID’s when reading the look-up tables.</p></li>
+<li><p><strong>zone</strong> (<em>str</em>) – Optional. Name of a <cite>.shp</cite> or <cite>.parquet</cite> file defining zone boundaries of interest.
+If provided, losses are aggregated at the zone level.</p></li>
+<li><p><strong>zone_id</strong> (<em>str</em>) – Optional. the name of the column containing unqiue zone_ids, defined by user.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None. The method stores loss estimate Tensors as output. See <a class="reference internal" href="Directory.html#dir-section"><span class="std std-ref">Directory Structure</span></a> for details.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>None</p>
